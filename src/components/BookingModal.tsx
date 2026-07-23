@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, Loader2 } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
+import PhoneInput from './PhoneInput';
 
 export default function BookingModal({ currentCity }: { currentCity?: any }) {
   const { isModalOpen, closeModal, subject } = useModal();
@@ -18,12 +19,6 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
     // Config for Web3Forms
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
 
-    if (subject) {
-      formData.append('subject', `Заявка с сайта: ${subject}`);
-    } else {
-      formData.append('subject', 'Новая заявка с сайта');
-    }
-    
     if (currentCity?.name) {
       formData.append('Город', currentCity.name);
     }
@@ -98,12 +93,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                {subject && (
-                  <div className="px-4 py-3 bg-[#8cc63f]/10 text-slate-700 rounded-xl text-sm border border-[#8cc63f]/20 font-medium">
-                    <span className="font-bold text-slate-900 uppercase tracking-wide text-xs mr-2">Интересует:</span> {subject}
-                  </div>
-                )}
-                
+                <input type="hidden" name="subject" value={subject ? `Заявка: ${subject}` : 'Новая заявка с сайта'} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Ваше имя <span className="text-[#8cc63f]">*</span></label>
@@ -118,10 +108,9 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                   
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Телефон <span className="text-[#8cc63f]">*</span></label>
-                    <input 
+                    <PhoneInput 
                       name="phone"
                       required
-                      type="tel" 
                       placeholder="+7 (999) 000-00-00" 
                       className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400"
                     />
@@ -133,9 +122,31 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                       name="car_make"
                       required
                       type="text" 
+                      list="car-brands-list"
                       placeholder="Например, Lada" 
                       className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400"
                     />
+                    <datalist id="car-brands-list">
+                      <option value="Audi" />
+                      <option value="BMW" />
+                      <option value="Chery" />
+                      <option value="Chevrolet" />
+                      <option value="Ford" />
+                      <option value="Geely" />
+                      <option value="Haval" />
+                      <option value="Hyundai" />
+                      <option value="Kia" />
+                      <option value="Lada" />
+                      <option value="Lexus" />
+                      <option value="Mazda" />
+                      <option value="Mercedes-Benz" />
+                      <option value="Nissan" />
+                      <option value="Renault" />
+                      <option value="Skoda" />
+                      <option value="Toyota" />
+                      <option value="Volkswagen" />
+                      <option value="Volvo" />
+                    </datalist>
                   </div>
                   
                   <div className="flex flex-col gap-1.5">

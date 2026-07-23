@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import SpecialOffers from './components/SpecialOffers';
 import Calculator from './components/Calculator';
+import BrandsMarquee from './components/BrandsMarquee';
 import DiscountBlock from './components/DiscountBlock';
 import Reviews from './components/Reviews';
 import FAQ from './components/FAQ';
@@ -26,6 +27,7 @@ function MainContent() {
         <Services currentCity={currentCity} />
         <SpecialOffers currentCity={currentCity} />
         <Calculator />
+        <BrandsMarquee />
         <DiscountBlock currentCity={currentCity} />
         <About />
         <Reviews />

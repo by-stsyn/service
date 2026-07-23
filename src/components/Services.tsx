@@ -5,9 +5,6 @@ import {
   Thermometer, Zap, Eye, Sliders
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import Papa from 'papaparse';
-
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZuIxRNJwvEDA-FmBDWZ8yxAYSm2TgDDRcK0H3cnY5IxkehLF0DYe8C-mUlZ5KNqMQPpKq05Fwffhw/pub?gid=667206035&single=true&output=csv';
 
 const CATEGORY_ICONS: Record<string, any> = {
   'Акции и спецпредложения': Gift,
@@ -43,6 +40,17 @@ interface ServicesProps {
   currentCity?: { slug: string; name: string };
 }
 
+const MOCK_SERVICES = [
+  { "категория": "Регулярное ТО", "название": "Замена масла в двигателе", "цена": "1500", "описание": "Включает замену масляного фильтра", "регион": "Все" },
+  { "категория": "Регулярное ТО", "название": "Замена воздушного фильтра", "цена": "500", "описание": "", "регион": "Все" },
+  { "категория": "Ходовая и тормозная часть", "название": "Замена тормозных колодок", "цена": "2000", "описание": "Цена за ось", "регион": "Все" },
+  { "категория": "Ходовая и тормозная часть", "название": "Диагностика подвески", "цена": "1000", "описание": "", "регион": "Все" },
+  { "категория": "Двигатель и Трансмиссия", "название": "Компьютерная диагностика двигателя", "цена": "1500", "описание": "Считывание и сброс ошибок", "регион": "Все" },
+  { "категория": "Двигатель и Трансмиссия", "название": "Замена ремня ГРМ", "цена": "8000", "описание": "Цена может варьироваться от модели", "регион": "Все" },
+  { "категория": "Шиномонтаж", "название": "Шиномонтаж 4 колес (R15-R17)", "цена": "2500", "описание": "Снятие, установка, балансировка", "регион": "Все" },
+  { "категория": "Акции и спецпредложения", "название": "Бесплатная диагностика при ремонте", "цена": "0", "описание": "При ремонте от 10000 руб.", "регион": "Все" },
+];
+
 export default function Services({ currentCity }: ServicesProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('');
@@ -50,22 +58,16 @@ export default function Services({ currentCity }: ServicesProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${CSV_URL}&t=${Date.now()}`)
-      .then(res => res.text())
-      .then(csv => {
-        const results = Papa.parse(csv, { 
-          header: true, 
-          skipEmptyLines: true,
-          transformHeader: (h) => h.toLowerCase().trim()
-        });
-        
+    // Mocking the fetch call
+    new Promise<typeof MOCK_SERVICES>((resolve) => {
+      setTimeout(() => resolve(MOCK_SERVICES), 600);
+    }).then(data => {
         const fetchedItems: ServiceItem[] = [];
 
-        results.data.forEach((row: any) => {
+        data.forEach((row: any) => {
           const name = row['название'] || '';
           if (!name.trim()) return;
 
-          // Attempt to read from commonly named columns for region
           const region = (row['регион'] || row['город'] || row['region'] || '').trim();
 
           let cat = 'Прочее';
@@ -105,9 +107,6 @@ export default function Services({ currentCity }: ServicesProps) {
             name,
             price: row['цена'] ? `${row['цена']} ₽` : 'Бесплатно',
             description: row['описание'] || '',
-            // We temporarily store the assigned category inside description/region fields just to reconstruct later,
-            // but it's cleaner to keep raw row data or attach category directly.
-            // Let's add an internal property `__category` instead:
             ...({ __category: cat } as any),
             region
           });
@@ -117,7 +116,7 @@ export default function Services({ currentCity }: ServicesProps) {
         setIsLoading(false);
       })
       .catch(err => {
-        console.error('Error fetching CSV:', err);
+        console.error('Error fetching mock data:', err);
         setIsLoading(false);
       });
   }, []);

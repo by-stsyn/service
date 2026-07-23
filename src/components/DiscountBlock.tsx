@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle, Loader2, Timer } from 'lucide-react';
+import PhoneInput from './PhoneInput';
 
 export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -89,9 +90,8 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Ваш телефон *</label>
-                    <input 
+                    <PhoneInput 
                       name="phone"
-                      type="tel" 
                       placeholder="+7 (999) 000-00-00" 
                       required
                       className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
@@ -103,10 +103,32 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                   <input 
                     name="car"
                     type="text" 
+                    list="discount-car-brands-list"
                     placeholder="Например, Hyundai Solaris" 
                     required
                     className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
                   />
+                  <datalist id="discount-car-brands-list">
+                    <option value="Audi" />
+                    <option value="BMW" />
+                    <option value="Chery" />
+                    <option value="Chevrolet" />
+                    <option value="Ford" />
+                    <option value="Geely" />
+                    <option value="Haval" />
+                    <option value="Hyundai" />
+                    <option value="Kia" />
+                    <option value="Lada" />
+                    <option value="Lexus" />
+                    <option value="Mazda" />
+                    <option value="Mercedes-Benz" />
+                    <option value="Nissan" />
+                    <option value="Renault" />
+                    <option value="Skoda" />
+                    <option value="Toyota" />
+                    <option value="Volkswagen" />
+                    <option value="Volvo" />
+                  </datalist>
                 </div>
 
                 <div className="mt-2">

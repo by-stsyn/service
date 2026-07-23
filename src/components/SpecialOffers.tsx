@@ -1,9 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import Papa from 'papaparse';
 import { Loader2, Tag, ArrowRight } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
-
-const OFFERS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZuIxRNJwvEDA-FmBDWZ8yxAYSm2TgDDRcK0H3cnY5IxkehLF0DYe8C-mUlZ5KNqMQPpKq05Fwffhw/pub?gid=2031295292&single=true&output=csv';
 
 interface Offer {
   id: string;
@@ -18,23 +15,24 @@ interface SpecialOffersProps {
   currentCity: { slug: string; name: string };
 }
 
+const MOCK_OFFERS = [
+  { "название": "Бесплатная замена масла", "описание": "При покупке масла и масляного фильтра в нашем сервисе - замена бесплатно!", "цена": "0", "зачеркнутая цена": "1500", "регион": "Все" },
+  { "название": "Скидка 15% на первое ТО", "описание": "Для новых клиентов предоставляем скидку 15% на работы при первом техническом обслуживании.", "цена": "от 3500", "зачеркнутая цена": "", "регион": "Все" },
+  { "название": "Комплексная диагностика за 990₽", "описание": "Проверка ходовой, тормозной системы, уровней жидкостей и компьютерная диагностика.", "цена": "990", "зачеркнутая цена": "2500", "регион": "Все" },
+];
+
 export default function SpecialOffers({ currentCity }: SpecialOffersProps) {
   const [rawOffers, setRawOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${OFFERS_CSV_URL}&t=${Date.now()}`)
-      .then(res => res.text())
-      .then(csv => {
-        const results = Papa.parse(csv, { 
-          header: true, 
-          skipEmptyLines: true,
-          transformHeader: (h) => h.toLowerCase().trim()
-        });
-        
+    // Mocking the fetch call
+    new Promise<typeof MOCK_OFFERS>((resolve) => {
+      setTimeout(() => resolve(MOCK_OFFERS), 600);
+    }).then(data => {
         const fetchedOffers: Offer[] = [];
         
-        results.data.forEach((row: any, index: number) => {
+        data.forEach((row: any, index: number) => {
           const name = row['название'] || '';
           if (!name.trim()) return;
 

@@ -6,14 +6,14 @@ import { MapPin, ChevronDown, Check, Menu, X as CloseIcon } from 'lucide-react';
 import { CITIES_DATA } from '../data';
 
 const NAV_LINKS = [
-  { label: 'Главная', href: '#home' },
-  { label: 'Услуги и цены', href: '#services' },
-  { label: 'Акции', href: '#offers' },
-  { label: 'Калькулятор ТО', href: '#calculator' },
-  { label: 'О нас', href: '#about' },
-  { label: 'Отзывы', href: '#reviews' },
-  { label: 'Вопросы-Ответы', href: '#faq' },
-  { label: 'Контакты', href: '#contacts' },
+  { label: 'Главная', href: '#home', hideOnDesktop: false },
+  { label: 'Услуги и цены', href: '#services', hideOnDesktop: false },
+  { label: 'Акции', href: '#offers', hideOnDesktop: false },
+  { label: 'Калькулятор ТО', href: '#calculator', hideOnDesktop: false },
+  { label: 'О нас', href: '#about', hideOnDesktop: true },
+  { label: 'Отзывы', href: '#reviews', hideOnDesktop: true },
+  { label: 'Вопросы-Ответы', href: '#faq', hideOnDesktop: true },
+  { label: 'Контакты', href: '#contacts', hideOnDesktop: false },
 ];
 
 export default function Header({ currentCity }: { currentCity: any }) {
@@ -27,7 +27,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
   // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 640) setIsMobileMenuOpen(false);
+      if (window.innerWidth >= 1024) setIsMobileMenuOpen(false);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -85,20 +85,20 @@ export default function Header({ currentCity }: { currentCity: any }) {
         <div className="flex items-center justify-between sm:justify-start px-4 sm:px-8 max-w-7xl mx-auto min-h-[48px] sm:min-h-[56px]">
           
           {/* Compact Logo (animates smoothly via CSS) */}
-          <div className={`hidden sm:flex items-center overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isScrolled ? 'max-w-[140px] opacity-100 mr-6' : 'max-w-0 opacity-0 mr-0'}`}>
+          <div className={`hidden lg:flex items-center overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isScrolled ? 'max-w-[140px] opacity-100 mr-6' : 'max-w-0 opacity-0 mr-0'}`}>
              <img src="/logo.png" alt="Прагматика" className="h-6 object-contain min-w-[100px]" onError={(e) => {
                (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="24"><rect width="60" height="24" fill="%23f1f5f9" rx="4"/><text x="30" y="16" font-family="sans-serif" font-size="10" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO</text></svg>';
              }} />
           </div>
 
-          <div className="sm:hidden flex flex-shrink-0 items-center">
+          <div className="lg:hidden flex flex-shrink-0 items-center">
              <img src="/logo.png" alt="Прагматика" className="h-6 object-contain w-[100px]" onError={(e) => {
                (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="24"><rect width="60" height="24" fill="%23f1f5f9" rx="4"/><text x="30" y="16" font-family="sans-serif" font-size="10" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO</text></svg>';
              }} />
           </div>
 
           {/* Custom City Selector (Desktop) */}
-          <div className="hidden sm:flex relative items-center gap-1.5 sm:gap-2 pr-2 sm:pr-6 border-r border-slate-200 mr-2 sm:mr-6 flex-shrink-0">
+          <div className="hidden lg:flex relative items-center gap-1.5 sm:gap-2 pr-2 sm:pr-6 border-r border-slate-200 mr-2 sm:mr-6 flex-shrink-0">
             <MapPin className="w-4 h-4 text-[#8cc63f]" />
             
             <button 
@@ -152,12 +152,12 @@ export default function Header({ currentCity }: { currentCity: any }) {
           </div>
 
           {/* Navigation (Desktop) */}
-          <nav className="hidden sm:flex items-center gap-6 sm:gap-8 overflow-x-auto hide-scrollbar flex-1 py-2">
-            {NAV_LINKS.map(link => (
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 overflow-x-auto hide-scrollbar flex-1 py-2 justify-center">
+            {NAV_LINKS.filter(link => !link.hideOnDesktop).map(link => (
               <a 
                 key={link.label}
                 href={link.href} 
-                className="text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#8cc63f] transition-colors whitespace-nowrap"
+                className="text-xs xl:text-sm font-semibold text-slate-600 hover:text-[#8cc63f] transition-colors whitespace-nowrap"
                 onClick={(e) => {
                   e.preventDefault();
                   const el = document.querySelector(link.href);
@@ -173,7 +173,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
           </nav>
 
           {/* Compact Phone/Button (Desktop) */}
-          <div className={`hidden sm:flex items-center justify-end overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isScrolled ? 'max-w-[300px] opacity-100 ml-4' : 'max-w-0 opacity-0 ml-0'}`}>
+          <div className={`hidden lg:flex items-center justify-end overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${isScrolled ? 'max-w-[300px] opacity-100 ml-4' : 'max-w-0 opacity-0 ml-0'}`}>
               <a 
                 href="tel:88005511967" 
                 className="ct-phone text-sm font-bold text-slate-900 hover:text-[#8cc63f] transition-colors tracking-tighter whitespace-nowrap mr-4"
@@ -186,7 +186,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
           </div>
           
           {/* Mobile Right Icons (Burger & Button) */}
-          <div className="flex sm:hidden items-center gap-3 ml-auto">
+          <div className="flex lg:hidden items-center gap-3 ml-auto">
             <button 
               onClick={() => openModal()} 
               className="bg-[#8cc63f] text-white px-4 py-2 rounded-xl font-bold text-[11px] uppercase tracking-wide shadow-sm"
@@ -210,7 +210,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm sm:hidden"
+            className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm lg:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <motion.div
