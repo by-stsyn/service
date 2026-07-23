@@ -1,34 +1,34 @@
-name: Deploy to Reg.ru
+name: Build and Deploy
 
 on:
   push:
-    branches:
-      - main # Укажите здесь вашу основную ветку, например master или main
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20' # Используемая версия Node.js
-          
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
-      - name: Deploy to Reg.ru via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: ./www/your-domain.ru/ # Замените на путь к папке вашего сайта на хостинге
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Build
+      run: npm run build
+      
+    - name: Deploy to Reg.ru FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/ # Папка, которую мы загружаем на сервер
+        server-dir: ./ # Корневая папка сайта на хостинге
