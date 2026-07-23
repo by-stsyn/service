@@ -23,7 +23,8 @@ export default function Header({ currentCity }: { currentCity: any }) {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
+  const [isStickyCityDropdownOpen, setIsStickyCityDropdownOpen] = useState(false);
+  const [isBannerCityDropdownOpen, setIsBannerCityDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -77,18 +78,70 @@ export default function Header({ currentCity }: { currentCity: any }) {
       {/* DESKTOP MAIN BAR (Sticky) */}
       <header className={`hidden lg:block sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-white border-b border-slate-100 py-5'}`}>
         <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
-          <a href="#home" onClick={handleScroll} className="flex-shrink-0 group">
-            <img 
-              src="/logo.png" 
-              alt="Прагматика Сервис" 
-              className={`transition-all duration-300 object-contain origin-left ${isScrolled ? 'h-8' : 'h-10'}`} 
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40"><rect width="120" height="40" fill="%23f1f5f9" rx="4"/><text x="60" y="24" font-family="sans-serif" font-size="12" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO PUBLIC</text></svg>';
-              }} 
-            />
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="#home" onClick={handleScroll} className="flex-shrink-0 group">
+              <img 
+                src="/logo.png" 
+                alt="Прагматика Сервис" 
+                className={`transition-all duration-300 object-contain origin-left ${isScrolled ? 'h-8' : 'h-10'}`} 
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40"><rect width="120" height="40" fill="%23f1f5f9" rx="4"/><text x="60" y="24" font-family="sans-serif" font-size="12" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO PUBLIC</text></svg>';
+                }} 
+              />
+            </a>
+            
+            {/* Mini City Selector (Visible on scroll) */}
+            <div className={`transition-all duration-300 overflow-visible flex items-center ${isScrolled ? 'max-w-[200px] opacity-100 ml-2' : 'max-w-0 opacity-0 ml-0 pointer-events-none'}`}>
+              <div className="relative">
+                <button 
+                  onClick={() => setIsStickyCityDropdownOpen(!isStickyCityDropdownOpen)} 
+                  className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-bold transition-colors outline-none text-[11px] uppercase tracking-wider bg-slate-100/80 hover:bg-slate-200 px-3 py-1.5 rounded-lg"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#8cc63f]" />
+                  <span className="truncate max-w-[140px] whitespace-nowrap">{currentCity.name}</span>
+                  <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isStickyCityDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+                
+                <AnimatePresence>
+                  {isStickyCityDropdownOpen && isScrolled && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setIsStickyCityDropdownOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 5 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 mt-3 w-56 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50 p-1.5"
+                      >
+                        {CITIES_DATA.map(city => {
+                          const isSelected = city.slug === currentCity.slug;
+                          return (
+                            <button
+                              key={city.slug}
+                              onClick={() => {
+                                navigate(`/${city.slug}`);
+                                setIsStickyCityDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold transition-colors rounded-lg outline-none ${
+                                isSelected 
+                                  ? 'bg-slate-50 text-[#8cc63f]' 
+                                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                              }`}
+                            >
+                              {city.name}
+                              {isSelected && <Check className="w-4 h-4 text-[#8cc63f]" />}
+                            </button>
+                          );
+                        })}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
           
-          <nav className="flex items-center gap-8 lg:gap-10 xl:gap-12 ml-8">
+          <nav className="flex items-center gap-8 lg:gap-10 xl:gap-12 ml-auto lg:mx-auto">
             {MAIN_NAV_LINKS.map(link => (
               <a 
                 key={link.label} 
@@ -119,8 +172,8 @@ export default function Header({ currentCity }: { currentCity: any }) {
       </header>
 
       {/* MOBILE HEADER (Sticky) */}
-      <header className={`lg:hidden sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-2' : 'bg-white border-b border-slate-100 py-3'}`}>
-        <div className="px-4 flex items-center justify-between">
+      <header className={`lg:hidden sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white border-b border-slate-100'}`}>
+        <div className={`px-4 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-14' : 'h-16'}`}>
           <a href="#home" onClick={handleScroll} className="flex-shrink-0 flex items-center">
             <img 
               src="/logo.png" 
@@ -140,7 +193,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
             </button>
             <button 
               onClick={() => setIsMobileMenuOpen(true)} 
-              className="p-1 -mr-1 text-slate-600 hover:text-slate-900 transition-colors"
+              className="p-1 -mr-1 text-slate-600 hover:text-slate-900 transition-colors flex items-center justify-center"
             >
               <Menu className="w-7 h-7" />
             </button>
@@ -254,17 +307,17 @@ export default function Header({ currentCity }: { currentCity: any }) {
           </div>
           <div className="relative">
             <button 
-              onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)} 
+              onClick={() => setIsBannerCityDropdownOpen(!isBannerCityDropdownOpen)} 
               className="flex items-center gap-1 font-extrabold text-slate-900 hover:text-[#8cc63f] transition-colors outline-none border-b border-dashed border-slate-900 hover:border-[#8cc63f]"
             >
               {currentCity.name}
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isCityDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isBannerCityDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             
             <AnimatePresence>
-              {isCityDropdownOpen && (
+              {isBannerCityDropdownOpen && (
                 <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsCityDropdownOpen(false)} />
+                  <div className="fixed inset-0 z-40" onClick={() => setIsBannerCityDropdownOpen(false)} />
                   <motion.div
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -279,7 +332,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
                           key={city.slug}
                           onClick={() => {
                             navigate(`/${city.slug}`);
-                            setIsCityDropdownOpen(false);
+                            setIsBannerCityDropdownOpen(false);
                           }}
                           className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold transition-colors rounded-lg outline-none ${
                             isSelected 
