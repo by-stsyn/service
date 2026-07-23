@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { X, CheckCircle, Loader2 } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
 import PhoneInput from './PhoneInput';
+import { ADDRESSES } from '../data';
 
 export default function BookingModal({ currentCity }: { currentCity?: any }) {
   const { isModalOpen, closeModal, subject } = useModal();
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   if (!isModalOpen) return null;
+
+  const currentAddresses = currentCity ? ADDRESSES.find(a => a.city === currentCity.name)?.addresses || [] : [];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,9 +21,10 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
     
     // Config for Web3Forms
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
-
+    formData.append('subject', 'Новая заявка лендинг Мультисервис');
+    
     if (currentCity?.name) {
-      formData.append('Город', currentCity.name);
+      formData.append('City', currentCity.name);
     }
 
     try {
@@ -49,157 +53,140 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
       onClick={closeModal}
     >
       <div 
-        className="bg-white w-full max-w-4xl rounded-xl shadow-2xl overflow-hidden relative flex flex-col md:flex-row max-h-[95vh] sm:max-h-[90vh]"
+        className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden relative flex flex-col md:flex-row max-h-[95vh] sm:max-h-[90vh]"
         onClick={e => e.stopPropagation()}
       >
         <button 
           onClick={closeModal}
           className="absolute top-4 right-4 z-20 p-2 text-slate-400 hover:text-slate-900 bg-white hover:bg-slate-100 rounded-full transition-colors shadow-sm md:shadow-none"
         >
-          <X className="w-5 h-5" />
+          <X className="w-6 h-6" />
         </button>
 
-        {/* Left Side: Image Banner */}
-        <div className="hidden md:flex md:w-5/12 relative bg-slate-900 overflow-hidden flex-col justify-end p-8 text-white">
-          <div className="absolute inset-0">
-            <img src="/form-pic.png" alt="Сервисный центр" className="w-full h-full object-cover opacity-60 mix-blend-overlay" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-          </div>
-          <div className="relative z-10 mt-auto">
-            <h3 className="text-3xl font-extrabold uppercase tracking-tight mb-3">Оставить заявку</h3>
-            <p className="text-slate-300 font-medium leading-relaxed">
-              Наши специалисты свяжутся с вами в течение 5 минут, чтобы уточнить детали и подобрать удобное время визита.
-            </p>
-          </div>
-        </div>
+        {/* Left Side: Form */}
+        <div className="w-full md:w-[55%] flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar">
+          <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-8">
+            Записаться на сервис
+          </h3>
 
-        {/* Right Side: Form */}
-        <div className="w-full md:w-7/12 flex flex-col">
-          <div className="p-6 sm:p-8 md:p-10 overflow-y-auto custom-scrollbar">
-            <h3 className="text-2xl font-extrabold text-slate-900 uppercase tracking-tight mb-2 md:hidden">
-              Оставить заявку
-            </h3>
-            <p className="text-slate-600 mb-6 md:hidden text-sm">
-              Наши специалисты свяжутся с вами в ближайшее время.
-            </p>
-
-            {status === 'success' ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center h-full">
-                <div className="w-20 h-20 bg-[#8cc63f]/10 rounded-full flex items-center justify-center mb-6">
-                  <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
-                </div>
-                <h4 className="text-2xl font-extrabold text-slate-900 uppercase tracking-tight mb-2">Заявка отправлена!</h4>
-                <p className="text-slate-600 font-medium">Наш менеджер свяжется с вами в ближайшее время.</p>
+          {status === 'success' ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center h-full">
+              <div className="w-20 h-20 bg-[#8cc63f]/10 rounded-full flex items-center justify-center mb-6">
+                <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                <input type="hidden" name="subject" value={subject ? `Заявка: ${subject}` : 'Новая заявка с сайта'} />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Ваше имя <span className="text-[#8cc63f]">*</span></label>
-                    <input 
-                      name="name"
-                      required
-                      type="text" 
-                      placeholder="Иван" 
-                      className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400"
-                    />
-                  </div>
-                  
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Телефон <span className="text-[#8cc63f]">*</span></label>
-                    <PhoneInput 
-                      name="phone"
-                      required
-                      placeholder="+7 (999) 000-00-00" 
-                      className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400"
-                    />
-                  </div>
-                  
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Марка авто <span className="text-[#8cc63f]">*</span></label>
-                    <input 
-                      name="car_make"
-                      required
-                      type="text" 
-                      list="car-brands-list"
-                      placeholder="Например, Lada" 
-                      className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400"
-                    />
-                    <datalist id="car-brands-list">
-                      <option value="Audi" />
-                      <option value="BMW" />
-                      <option value="Chery" />
-                      <option value="Chevrolet" />
-                      <option value="Ford" />
-                      <option value="Geely" />
-                      <option value="Haval" />
-                      <option value="Hyundai" />
-                      <option value="Kia" />
-                      <option value="Lada" />
-                      <option value="Lexus" />
-                      <option value="Mazda" />
-                      <option value="Mercedes-Benz" />
-                      <option value="Nissan" />
-                      <option value="Renault" />
-                      <option value="Skoda" />
-                      <option value="Toyota" />
-                      <option value="Volkswagen" />
-                      <option value="Volvo" />
-                    </datalist>
-                  </div>
-                  
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Модель авто <span className="text-[#8cc63f]">*</span></label>
-                    <input 
-                      name="car_model"
-                      required
-                      type="text" 
-                      placeholder="Например, Vesta" 
-                      className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Комментарий</label>
-                  <textarea 
-                    name="comment"
-                    placeholder="Опишите проблему или пожелания (необязательно)" 
-                    rows={3}
-                    className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400 resize-none"
-                  ></textarea>
+              <h4 className="text-2xl font-bold text-slate-900 mb-2">Заявка отправлена!</h4>
+              <p className="text-slate-600 font-medium">Наш менеджер свяжется с вами в ближайшее время.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <input type="hidden" name="Source" value="Заявка с сайта (Модальное окно)" />
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <input 
+                    name="name"
+                    required
+                    type="text" 
+                    placeholder="Введите ФИО*" 
+                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 placeholder:text-slate-400"
+                  />
                 </div>
                 
-                {status === 'error' && (
-                  <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 font-medium text-center">
-                    Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.
-                  </div>
-                )}
-
-                <div className="mt-4">
-                  <button 
-                    type="submit"
-                    disabled={status === 'submitting'}
-                    className="w-full flex items-center justify-center gap-3 bg-[#8cc63f] hover:bg-[#7db435] text-white font-bold text-lg uppercase tracking-wide px-6 py-4 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
-                  >
-                    {status === 'submitting' ? (
-                      <>
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                        Отправка...
-                      </>
-                    ) : (
-                      'Оставить заявку'
-                    )}
-                  </button>
-                  <p className="text-xs text-center text-slate-400 font-medium mt-4">
-                    Нажимая кнопку, вы соглашаетесь с <a href="#" className="underline hover:text-[#8cc63f] transition-colors">политикой конфиденциальности</a>
-                  </p>
+                <div>
+                  <PhoneInput 
+                    name="phone"
+                    required
+                    placeholder="+7 (___) ___-__-__" 
+                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 placeholder:text-slate-400"
+                  />
                 </div>
-              </form>
-            )}
-          </div>
+              </div>
+
+              <div>
+                <select 
+                  name="service"
+                  required
+                  defaultValue={subject ? subject.replace('Запись на услугу: ', '') : ''}
+                  className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                >
+                  <option value="" disabled>Укажите услугу*</option>
+                  <option value="Техническое обслуживание и ремонт">Техническое обслуживание и ремонт</option>
+                  <option value="Диагностика">Диагностика</option>
+                  <option value="Кузовной ремонт">Кузовной ремонт</option>
+                  <option value="Детейлинг">Детейлинг</option>
+                  <option value="Дополнительное оборудование">Дополнительное оборудование</option>
+                  <option value="Шиномонтаж">Шиномонтаж</option>
+                  <option value="Другое">Другое</option>
+                </select>
+              </div>
+
+              <div>
+                <select 
+                  name="dealer_center"
+                  required
+                  defaultValue=""
+                  className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                >
+                  <option value="" disabled>Укажите дилерский центр*</option>
+                  {currentAddresses.map((addr, idx) => (
+                    <option key={idx} value={addr}>{addr}</option>
+                  ))}
+                  {currentAddresses.length === 0 && (
+                    <option value="Любой">Любой (менеджер подберет)</option>
+                  )}
+                </select>
+              </div>
+              
+              {status === 'error' && (
+                <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100 font-medium text-center">
+                  Произошла ошибка при отправке заявки.
+                </div>
+              )}
+
+              <div className="mt-2">
+                <button 
+                  type="submit"
+                  disabled={status === 'submitting'}
+                  className="w-full flex items-center justify-center gap-3 bg-[#8cc63f] hover:bg-[#7db435] text-white font-medium text-lg px-6 py-4 rounded-xl shadow-sm transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
+                >
+                  {status === 'submitting' ? (
+                    <>
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                      Отправка...
+                    </>
+                  ) : (
+                    'Отправить'
+                  )}
+                </button>
+              </div>
+
+              <div className="mt-4 flex items-start gap-3">
+                <div className="relative flex items-start pt-1">
+                  <input
+                    type="checkbox"
+                    id="consent-modal"
+                    required
+                    defaultChecked
+                    className="w-5 h-5 border-slate-300 rounded text-[#8cc63f] focus:ring-[#8cc63f] bg-slate-50 cursor-pointer"
+                  />
+                </div>
+                <label htmlFor="consent-modal" className="text-xs text-slate-500 leading-tight cursor-pointer">
+                  Я даю согласие группе компаний «Прагматика» на <a href="#" className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
+                </label>
+              </div>
+            </form>
+          )}
         </div>
+
+        {/* Right Side: Decorative Image */}
+        <div className="hidden md:flex md:w-[45%] relative bg-white items-center justify-center p-8 lg:p-12 overflow-hidden">
+          <img 
+            src="/form-pic.png" 
+            alt="Запись на сервис" 
+            className="w-full h-auto object-contain"
+          />
+        </div>
+
       </div>
     </div>
   );

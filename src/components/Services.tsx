@@ -31,6 +31,7 @@ interface ServiceItem {
   price: string;
   description: string;
   region: string;
+  __category?: string;
 }
 
 interface ServiceCategory {
@@ -319,19 +320,21 @@ export default function Services({ currentCity }: ServicesProps) {
 
       <AnimatePresence>
         {isModalOpen && !isLoading && services.length > 0 && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+          <motion.div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
               onClick={() => setIsModalOpen(false)}
-              className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50"
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed inset-x-4 top-4 bottom-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-4xl bg-white rounded-xl shadow-lg z-50 flex flex-col overflow-hidden"
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="relative w-full max-w-4xl max-h-full bg-white rounded-xl shadow-lg flex flex-col overflow-hidden"
             >
               <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50 flex-shrink-0">
                 <h3 className="text-xl sm:text-2xl font-semibold text-slate-900 uppercase tracking-tight truncate pr-4">
@@ -387,7 +390,7 @@ export default function Services({ currentCity }: ServicesProps) {
                 </button>
               </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>

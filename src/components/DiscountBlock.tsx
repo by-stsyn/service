@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle, Loader2, Timer } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
 import PhoneInput from './PhoneInput';
+import { ADDRESSES } from '../data';
 
 export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const currentAddresses = currentCity ? ADDRESSES.find(a => a.city === currentCity.name)?.addresses || [] : [];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,10 +16,11 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
     const formData = new FormData(form);
     
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
-    formData.append('subject', 'Заявка на скидку с сайта');
+    formData.append('subject', 'Новая заявка лендинг Мультисервис');
+    formData.append('Source', 'Заявка на скидку (Первый визит)');
     
     if (currentCity?.name) {
-      formData.append('Город', currentCity.name);
+      formData.append('City', currentCity.name);
     }
 
     try {
@@ -25,7 +29,6 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
         body: formData
       });
       const data = await res.json();
-
       if (data.success) {
         setStatus('success');
         setTimeout(() => {
@@ -43,99 +46,90 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
   return (
     <section className="px-4 sm:px-8 py-16 sm:py-24 bg-slate-50 flex-shrink-0">
       <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-xl border border-slate-100 shadow-xl overflow-hidden flex flex-col md:flex-row">
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden flex flex-col md:flex-row relative">
           
-          {/* Left side: Image & Text */}
-          <div className="md:w-5/12 bg-slate-900 relative p-6 sm:p-12 flex flex-col justify-center text-white min-h-[400px]">
-             <div className="absolute inset-0">
-                <img src="/form-pic.png" alt="Сервисный центр" className="w-full h-full object-cover opacity-40 mix-blend-overlay" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40"></div>
-             </div>
-             <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#8cc63f] text-white rounded-xl text-xs font-extrabold uppercase tracking-widest mb-6 shadow-sm">
-                  <Timer className="w-4 h-4" />
-                  Предложение ограничено
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight mb-4 leading-tight">
-                  Скидка на <br/><span className="text-[#8cc63f]">первый визит</span>
-                </h2>
-                <p className="text-slate-300 font-medium leading-relaxed max-w-sm">
-                  Оставьте заявку сейчас и мы зафиксируем за вами персональную скидку на первое обслуживание в нашем сервисном центре.
-                </p>
-             </div>
-          </div>
+          {/* Left side: Form */}
+          <div className="md:w-[55%] p-8 sm:p-12 md:p-16 flex flex-col justify-center relative z-10 bg-white">
+            <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-8">
+              Записаться на сервис
+            </h3>
 
-          {/* Right side: Form */}
-          <div className="md:w-7/12 p-6 sm:p-12 bg-white flex flex-col justify-center">
             {status === 'success' ? (
-              <div className="bg-[#8cc63f]/10 border border-[#8cc63f]/20 rounded-xl p-10 flex flex-col items-center justify-center text-center h-full">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm">
+              <div className="flex flex-col items-center justify-center py-8 text-center h-full">
+                <div className="w-20 h-20 bg-[#8cc63f]/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
                   <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
                 </div>
-                <h4 className="text-3xl font-black text-slate-900 uppercase tracking-tight mb-3">Заявка принята!</h4>
-                <p className="text-slate-600 font-medium text-lg">Скидка успешно зафиксирована. Наш менеджер перезвонит вам в ближайшее время для подтверждения.</p>
+                <h4 className="text-2xl font-bold text-slate-900 mb-2">Заявка принята!</h4>
+                <p className="text-slate-600 font-medium">Скидка успешно зафиксирована. Наш менеджер перезвонит вам в ближайшее время.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Ваше имя</label>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
                     <input 
                       name="name"
                       type="text" 
-                      placeholder="Иван" 
+                      placeholder="Введите ФИО*" 
                       required
-                      className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
+                      className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
                     />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Ваш телефон *</label>
+                  <div>
                     <PhoneInput 
                       name="phone"
-                      placeholder="+7 (999) 000-00-00" 
+                      placeholder="+7 (___) ___-__-__" 
                       required
-                      className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
+                      className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Марка и модель авто</label>
-                  <input 
-                    name="car"
-                    type="text" 
-                    list="discount-car-brands-list"
-                    placeholder="Например, Hyundai Solaris" 
+
+                <div>
+                  <select 
+                    name="service"
                     required
-                    className="w-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
-                  />
-                  <datalist id="discount-car-brands-list">
-                    <option value="Audi" />
-                    <option value="BMW" />
-                    <option value="Chery" />
-                    <option value="Chevrolet" />
-                    <option value="Ford" />
-                    <option value="Geely" />
-                    <option value="Haval" />
-                    <option value="Hyundai" />
-                    <option value="Kia" />
-                    <option value="Lada" />
-                    <option value="Lexus" />
-                    <option value="Mazda" />
-                    <option value="Mercedes-Benz" />
-                    <option value="Nissan" />
-                    <option value="Renault" />
-                    <option value="Skoda" />
-                    <option value="Toyota" />
-                    <option value="Volkswagen" />
-                    <option value="Volvo" />
-                  </datalist>
+                    defaultValue=""
+                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                  >
+                    <option value="" disabled>Укажите услугу*</option>
+                    <option value="Техническое обслуживание и ремонт">Техническое обслуживание и ремонт</option>
+                    <option value="Диагностика">Диагностика</option>
+                    <option value="Кузовной ремонт">Кузовной ремонт</option>
+                    <option value="Детейлинг">Детейлинг</option>
+                    <option value="Дополнительное оборудование">Дополнительное оборудование</option>
+                    <option value="Шиномонтаж">Шиномонтаж</option>
+                    <option value="Другое">Другое</option>
+                  </select>
                 </div>
+
+                <div>
+                  <select 
+                    name="dealer_center"
+                    required
+                    defaultValue=""
+                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                  >
+                    <option value="" disabled>Укажите дилерский центр*</option>
+                    {currentAddresses.map((addr, idx) => (
+                      <option key={idx} value={addr}>{addr}</option>
+                    ))}
+                    {currentAddresses.length === 0 && (
+                      <option value="Любой">Любой (менеджер подберет)</option>
+                    )}
+                  </select>
+                </div>
+
+                {status === 'error' && (
+                  <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100 font-medium text-center">
+                    Произошла ошибка при отправке заявки.
+                  </div>
+                )}
 
                 <div className="mt-2">
                   <button 
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full bg-[#8cc63f] hover:bg-[#7db435] text-white font-bold text-lg uppercase tracking-wide px-6 py-4 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 flex items-center justify-center gap-3"
+                    className="w-full flex items-center justify-center gap-3 bg-[#8cc63f] hover:bg-[#7db435] text-white font-medium text-lg px-6 py-4 rounded-xl shadow-sm transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
                   >
                     {status === 'submitting' ? (
                       <>
@@ -143,23 +137,38 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                         Отправка...
                       </>
                     ) : (
-                      'Получить скидку'
+                      'Отправить'
                     )}
                   </button>
                 </div>
 
-                {status === 'error' && (
-                  <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 font-medium text-center">
-                    Произошла ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.
+                <div className="mt-4 flex items-start gap-3">
+                  <div className="relative flex items-start pt-1">
+                    <input
+                      type="checkbox"
+                      id="consent-discount"
+                      required
+                      defaultChecked
+                      className="w-5 h-5 border-slate-300 rounded text-[#8cc63f] focus:ring-[#8cc63f] bg-slate-50 cursor-pointer"
+                    />
                   </div>
-                )}
-
-                <p className="text-xs text-slate-400 text-center font-medium">
-                  Нажимая кнопку, вы соглашаетесь с <a href="#" className="underline hover:text-[#8cc63f] transition-colors">политикой конфиденциальности</a>
-                </p>
+                  <label htmlFor="consent-discount" className="text-xs text-slate-500 leading-tight cursor-pointer">
+                    Я даю согласие группе компаний «Прагматика» на <a href="#" className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
+                  </label>
+                </div>
               </form>
             )}
           </div>
+
+          {/* Right side: Decorative Image */}
+          <div className="hidden md:flex md:w-[45%] relative bg-white items-center justify-center p-8 lg:p-12 overflow-hidden">
+            <img 
+              src="/form-pic.png" 
+              alt="Сервисный центр" 
+              className="w-full h-auto object-contain"
+            />
+          </div>
+
         </div>
       </div>
     </section>

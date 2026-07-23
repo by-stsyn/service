@@ -14,7 +14,7 @@ import About from './components/About';
 import Contacts from './components/Contacts';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
-import { CITIES_DATA } from './data';
+import { CITIES_DATA, ADDRESSES } from './data';
 import { ModalProvider } from './contexts/ModalContext';
 
 function MainContent() {
@@ -32,7 +32,7 @@ function MainContent() {
     "name": `Прагматика Мультисервис ${cityName}`,
     "image": "https://pragmatika-service.ru/logo.png",
     "url": pageUrl,
-    "telephone": currentCity.phone,
+    "telephone": ADDRESSES.find(a => a.city === cityName)?.phone || "8 800 551-19-67",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": cityName,

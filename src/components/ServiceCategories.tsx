@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useModal } from '../contexts/ModalContext';
 
 const CATEGORIES = [
   {
@@ -41,6 +42,7 @@ const CATEGORIES = [
 ];
 
 export default function ServiceCategories() {
+  const { openModal } = useModal();
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -77,6 +79,7 @@ export default function ServiceCategories() {
           {CATEGORIES.map((category) => (
             <div 
               key={category.id}
+              onClick={() => openModal(`Запись на услугу: ${category.title}`)}
               className="relative rounded-2xl overflow-hidden h-[320px] sm:h-[350px] lg:h-[380px] group cursor-pointer shadow-sm hover:shadow-xl transition-shadow duration-300"
             >
               {/* Background Image */}
