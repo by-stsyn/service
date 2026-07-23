@@ -3,9 +3,8 @@ import { CheckCircle, Loader2 } from 'lucide-react';
 import PhoneInput from './PhoneInput';
 import { ADDRESSES } from '../data';
 
-export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
+export default function QuestionForm({ currentCity }: { currentCity?: any }) {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-
   const currentAddresses = currentCity ? ADDRESSES.find(a => a.city === currentCity.name)?.addresses || [] : [];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,7 +16,7 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
     
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
     formData.append('subject', 'Новая заявка лендинг Мультисервис');
-    formData.append('Source', 'Заявка на скидку (Первый визит)');
+    formData.append('Source', 'Вопрос с сайта (Блок "Остались вопросы")');
     
     if (currentCity?.name) {
       formData.append('City', currentCity.name);
@@ -31,10 +30,7 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
       const data = await res.json();
       if (data.success) {
         setStatus('success');
-        setTimeout(() => {
-          setStatus('idle');
-          form.reset();
-        }, 4000);
+        form.reset();
       } else {
         setStatus('error');
       }
@@ -44,15 +40,16 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
   };
 
   return (
-    <section className="px-4 sm:px-8 py-16 sm:py-24 bg-slate-50 flex-shrink-0">
+    <section className="px-4 sm:px-8 py-10 sm:py-16 bg-slate-50 flex-shrink-0 mt-8">
       <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden flex flex-col md:flex-row relative">
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl flex flex-col md:flex-row relative">
           
           {/* Left side: Form */}
-          <div className="md:w-[55%] p-8 sm:p-12 md:p-16 flex flex-col justify-center relative z-10 bg-white">
-            <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-8">
-              Записаться на сервис
+          <div className="md:w-[55%] p-6 sm:p-10 md:p-12 flex flex-col justify-center relative z-10 rounded-l-3xl">
+            <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-2">
+              Остались вопросы? <span className="text-xl md:text-2xl text-slate-500 font-normal">Мы с радостью ответим Вам</span>
             </h3>
+            <div className="mb-6"></div>
 
             {status === 'success' ? (
               <div className="flex flex-col items-center justify-center py-8 text-center h-full">
@@ -60,46 +57,36 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                   <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
                 </div>
                 <h4 className="text-2xl font-bold text-slate-900 mb-2">Заявка принята!</h4>
-                <p className="text-slate-600 font-medium">Скидка успешно зафиксирована. Наш менеджер перезвонит вам в ближайшее время.</p>
+                <p className="text-slate-600 font-medium">Ваш вопрос получен. Наш менеджер свяжется с вами в ближайшее время.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <input 
-                      name="name"
-                      type="text" 
-                      placeholder="Введите ФИО*" 
-                      required
-                      className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
-                    />
-                  </div>
-                  <div>
-                    <PhoneInput 
-                      name="phone"
-                      placeholder="+7 (___) ___-__-__" 
-                      required
-                      className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
-                    />
-                  </div>
+                <div>
+                  <input 
+                    name="name"
+                    type="text" 
+                    placeholder="Введите ФИО*" 
+                    required
+                    className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
+                  />
+                </div>
+                
+                <div>
+                  <PhoneInput 
+                    name="phone"
+                    placeholder="+7 (___) ___-__-__" 
+                    required
+                    className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium"
+                  />
                 </div>
 
                 <div>
-                  <select 
-                    name="service"
-                    required
-                    defaultValue=""
-                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
-                  >
-                    <option value="" disabled>Укажите услугу*</option>
-                    <option value="Техническое обслуживание и ремонт">Техническое обслуживание и ремонт</option>
-                    <option value="Диагностика">Диагностика</option>
-                    <option value="Кузовной ремонт">Кузовной ремонт</option>
-                    <option value="Детейлинг">Детейлинг</option>
-                    <option value="Дополнительное оборудование">Дополнительное оборудование</option>
-                    <option value="Шиномонтаж">Шиномонтаж</option>
-                    <option value="Другое">Другое</option>
-                  </select>
+                  <textarea 
+                    name="question"
+                    placeholder="Ваш вопрос (необязательно)" 
+                    rows={2}
+                    className="w-full bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all font-medium resize-none"
+                  />
                 </div>
 
                 <div>
@@ -156,13 +143,13 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                   <div className="relative flex items-start pt-1">
                     <input
                       type="checkbox"
-                      id="consent-discount"
+                      id="consent-question"
                       required
                       defaultChecked
                       className="w-5 h-5 border-slate-300 rounded text-[#8cc63f] focus:ring-[#8cc63f] bg-slate-50 cursor-pointer"
                     />
                   </div>
-                  <label htmlFor="consent-discount" className="text-xs text-slate-500 leading-tight cursor-pointer">
+                  <label htmlFor="consent-question" className="text-xs text-slate-500 leading-tight cursor-pointer">
                     Я даю согласие группе компаний «Прагматика» на <a href="#" className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
                   </label>
                 </div>
@@ -171,12 +158,17 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
           </div>
 
           {/* Right side: Decorative Image */}
-          <div className="hidden md:flex md:w-[45%] relative bg-white items-center justify-center p-8 lg:p-12 overflow-hidden">
-            <img 
-              src="/form-pic.png" 
-              alt="Сервисный центр" 
-              className="w-full h-auto object-contain"
-            />
+          <div className="hidden md:flex md:w-[45%] relative items-center justify-center">
+            {/* Background Shape */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-full max-w-sm aspect-square bg-[#eaf4d9] rounded-l-full rounded-tr-full rotate-45 z-0"></div>
+            
+            <div className="absolute z-10 w-full h-[140%] flex items-center justify-center pointer-events-none">
+              <img 
+                src="/qa.png" 
+                alt="Вопросы" 
+                className="w-full max-w-[280px] lg:max-w-[340px] h-full object-contain drop-shadow-2xl"
+              />
+            </div>
           </div>
 
         </div>

@@ -10,6 +10,7 @@ import BrandsMarquee from './components/BrandsMarquee';
 import DiscountBlock from './components/DiscountBlock';
 import Reviews from './components/Reviews';
 import FAQ from './components/FAQ';
+import QuestionForm from './components/QuestionForm';
 import About from './components/About';
 import Contacts from './components/Contacts';
 import Footer from './components/Footer';
@@ -102,6 +103,7 @@ function MainContent() {
         <About />
         <Reviews />
         <FAQ />
+        <QuestionForm currentCity={currentCity} />
         <Contacts currentCity={currentCity} />
       </main>
       <Footer />

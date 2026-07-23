@@ -121,20 +121,30 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
               </div>
 
               <div>
-                <select 
-                  name="dealer_center"
-                  required
-                  defaultValue=""
-                  className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
-                >
-                  <option value="" disabled>Укажите дилерский центр*</option>
-                  {currentAddresses.map((addr, idx) => (
-                    <option key={idx} value={addr}>{addr}</option>
-                  ))}
-                  {currentAddresses.length === 0 && (
-                    <option value="Любой">Любой (менеджер подберет)</option>
-                  )}
-                </select>
+                {currentAddresses.length > 1 || currentAddresses.length === 0 ? (
+                  <select 
+                    name="dealer_center"
+                    required
+                    defaultValue=""
+                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                  >
+                    <option value="" disabled>Укажите дилерский центр*</option>
+                    {currentAddresses.map((addr: string, idx: number) => (
+                      <option key={idx} value={addr}>{addr}</option>
+                    ))}
+                    {currentAddresses.length === 0 && (
+                      <option value="Любой">Любой (менеджер подберет)</option>
+                    )}
+                  </select>
+                ) : (
+                  <input 
+                    type="text"
+                    name="dealer_center"
+                    value={currentAddresses[0]}
+                    readOnly
+                    className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl outline-none text-slate-600 cursor-default"
+                  />
+                )}
               </div>
               
               {status === 'error' && (
