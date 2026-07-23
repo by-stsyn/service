@@ -38,7 +38,7 @@ export default function Contacts({ currentCity }: { currentCity: any }) {
                 </div>
                 <div>
                   <h4 className="font-semibold text-slate-900 mb-1">Единый телефон</h4>
-                  <a href={`tel:${cityData.phone.replace(/\D/g, '')}`} className="text-lg font-semibold text-slate-900 hover:text-[#8cc63f] transition-colors">
+                  <a href={`tel:${cityData.phone.replace(/\D/g, '')}`} className="ct-phone text-lg font-semibold text-slate-900 hover:text-[#8cc63f] transition-colors">
                     {cityData.phone}
                   </a>
                 </div>
