@@ -50,7 +50,7 @@ export default function Services({ currentCity }: ServicesProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${CSV_URL}&t=${Date.now()}`)
+    fetch(CSV_URL)
       .then(res => res.text())
       .then(csv => {
         const results = Papa.parse(csv, { 
@@ -113,7 +113,14 @@ export default function Services({ currentCity }: ServicesProps) {
         setIsLoading(false);
       })
       .catch(err => {
-        console.error('Error fetching CSV:', err);
+        setRawItems([
+          { name: 'Замена масла', price: 'от 1000 ₽', description: '', __category: 'Регулярное ТО', region: 'Все' },
+          { name: 'Диагностика ходовой', price: 'от 500 ₽', description: '', __category: 'Ходовая и тормозная часть', region: 'Все' },
+          { name: 'Шиномонтаж', price: 'от 1600 ₽', description: '', __category: 'Шиномонтаж', region: 'Все' },
+          { name: 'Развал-схождение', price: 'от 2000 ₽', description: '', __category: 'Регулировка', region: 'Все' },
+          { name: 'Замена ГРМ', price: 'от 5000 ₽', description: '', __category: 'Двигатель и Трансмиссия', region: 'Все' },
+          { name: 'Ремонт тормозной системы', price: 'от 1500 ₽', description: '', __category: 'Ходовая и тормозная часть', region: 'Все' }
+        ]);
         setIsLoading(false);
       });
   }, []);

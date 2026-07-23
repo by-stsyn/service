@@ -104,6 +104,8 @@ export default function Header({ currentCity }: { currentCity: any }) {
             <button 
               onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
               className="flex items-center gap-1.5 text-sm text-slate-800 font-bold hover:text-[#8cc63f] transition-colors outline-none group"
+              aria-label="Выбрать город"
+              aria-expanded={isCityDropdownOpen}
             >
               <span className="truncate max-w-[140px]">{currentCity.name}</span>
               <ChevronDown className={`w-4 h-4 text-slate-400 group-hover:text-[#8cc63f] transition-all duration-300 ${isCityDropdownOpen ? 'rotate-180 text-[#8cc63f]' : ''}`} />
@@ -196,6 +198,8 @@ export default function Header({ currentCity }: { currentCity: any }) {
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
               className="p-2 -mr-2 text-slate-600 hover:text-slate-900 focus:outline-none"
+              aria-label="Открыть меню"
+              aria-expanded={isMobileMenuOpen}
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -230,6 +234,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2 text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 rounded-xl"
+                  aria-label="Закрыть меню"
                 >
                   <CloseIcon className="w-5 h-5" />
                 </button>

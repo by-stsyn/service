@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { Loader2, Tag, ArrowRight } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
+import { OFFERS } from '../data';
 
 const OFFERS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZuIxRNJwvEDA-FmBDWZ8yxAYSm2TgDDRcK0H3cnY5IxkehLF0DYe8C-mUlZ5KNqMQPpKq05Fwffhw/pub?gid=2031295292&single=true&output=csv';
 
@@ -23,7 +24,7 @@ export default function SpecialOffers({ currentCity }: SpecialOffersProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${OFFERS_CSV_URL}&t=${Date.now()}`)
+    fetch(OFFERS_CSV_URL)
       .then(res => res.text())
       .then(csv => {
         const results = Papa.parse(csv, { 
@@ -54,7 +55,15 @@ export default function SpecialOffers({ currentCity }: SpecialOffersProps) {
         setLoading(false);
       })
       .catch(err => {
-        console.error('Failed to fetch offers:', err);
+        // Fallback to mock data if fetch fails
+        setRawOffers(OFFERS.map(o => ({
+          id: String(o.id),
+          region: o.city,
+          title: o.title,
+          description: o.description,
+          newPrice: o.newPrice,
+          oldPrice: o.oldPrice
+        })));
         setLoading(false);
       });
   }, []);

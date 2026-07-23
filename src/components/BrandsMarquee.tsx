@@ -14,6 +14,26 @@ const TOP_BRANDS = [...MOCK_BRANDS.slice(0, 8), ...MOCK_BRANDS.slice(0, 8)];
 const MIDDLE_BRANDS = [...MOCK_BRANDS.slice(8), ...MOCK_BRANDS.slice(8)];
 const BOTTOM_BRANDS = [...MOCK_BRANDS_3, ...MOCK_BRANDS_3];
 
+function BrandLogo({ brand }: { brand: string }) {
+  return (
+    <div className="w-24 h-16 sm:w-36 sm:h-20 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center p-3 sm:p-5 hover:shadow-md transition-shadow hover:border-slate-200">
+      <img 
+        src={`/brands/${brand}.png`} 
+        alt={`Автосервис для автомобилей марки ${brand}`}
+        loading="lazy"
+        className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all opacity-50 hover:opacity-100"
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = 'none';
+          const span = document.createElement('span');
+          span.className = 'text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider';
+          span.innerText = brand;
+          (e.target as HTMLImageElement).parentElement?.appendChild(span);
+        }}
+      />
+    </div>
+  );
+}
+
 export default function BrandsMarquee() {
   return (
     <section className="py-12 sm:py-16 bg-white overflow-hidden border-b border-slate-100">
@@ -35,21 +55,7 @@ export default function BrandsMarquee() {
               transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
             >
                 {TOP_BRANDS.map((brand, idx) => (
-                    <div key={`top-${brand}-${idx}`} className="w-24 h-16 sm:w-36 sm:h-20 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center p-3 sm:p-5 hover:shadow-md transition-shadow hover:border-slate-200">
-                        <img 
-                            src={`/brands/${brand}.png`} 
-                            alt={brand}
-                            className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all opacity-50 hover:opacity-100"
-                            onError={(e) => {
-                                // Fallback placeholder text if image missing
-                                (e.target as HTMLImageElement).style.display = 'none';
-                                const span = document.createElement('span');
-                                span.className = 'text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider';
-                                span.innerText = brand;
-                                (e.target as HTMLImageElement).parentElement?.appendChild(span);
-                            }}
-                        />
-                    </div>
+                    <BrandLogo key={`top-${brand}-${idx}`} brand={brand} />
                 ))}
             </motion.div>
         </div>
@@ -62,21 +68,7 @@ export default function BrandsMarquee() {
               transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
             >
                 {MIDDLE_BRANDS.map((brand, idx) => (
-                    <div key={`middle-${brand}-${idx}`} className="w-24 h-16 sm:w-36 sm:h-20 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center p-3 sm:p-5 hover:shadow-md transition-shadow hover:border-slate-200">
-                        <img 
-                            src={`/brands/${brand}.png`} 
-                            alt={brand}
-                            className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all opacity-50 hover:opacity-100"
-                            onError={(e) => {
-                                // Fallback placeholder text if image missing
-                                (e.target as HTMLImageElement).style.display = 'none';
-                                const span = document.createElement('span');
-                                span.className = 'text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider';
-                                span.innerText = brand;
-                                (e.target as HTMLImageElement).parentElement?.appendChild(span);
-                            }}
-                        />
-                    </div>
+                    <BrandLogo key={`middle-${brand}-${idx}`} brand={brand} />
                 ))}
             </motion.div>
         </div>
@@ -89,21 +81,7 @@ export default function BrandsMarquee() {
               transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
             >
                 {BOTTOM_BRANDS.map((brand, idx) => (
-                    <div key={`bottom-${brand}-${idx}`} className="w-24 h-16 sm:w-36 sm:h-20 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center p-3 sm:p-5 hover:shadow-md transition-shadow hover:border-slate-200">
-                        <img 
-                            src={`/brands/${brand}.png`} 
-                            alt={brand}
-                            className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all opacity-50 hover:opacity-100"
-                            onError={(e) => {
-                                // Fallback placeholder text if image missing
-                                (e.target as HTMLImageElement).style.display = 'none';
-                                const span = document.createElement('span');
-                                span.className = 'text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider';
-                                span.innerText = brand;
-                                (e.target as HTMLImageElement).parentElement?.appendChild(span);
-                            }}
-                        />
-                    </div>
+                    <BrandLogo key={`bottom-${brand}-${idx}`} brand={brand} />
                 ))}
             </motion.div>
         </div>

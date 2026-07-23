@@ -213,6 +213,7 @@ export default function Hero({ currentCity }: { currentCity: any }) {
             <button 
               onClick={prevSlide}
               className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+              aria-label="Предыдущий слайд"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -226,13 +227,14 @@ export default function Hero({ currentCity }: { currentCity: any }) {
                     setCurrentIndex(idx);
                   }}
                   className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'bg-[#8cc63f] w-8' : 'bg-white/50 w-2.5 hover:bg-white/80'}`}
-                  aria-label={`Go to slide ${idx + 1}`}
+                  aria-label={`Перейти к слайду ${idx + 1}`}
                 />
               ))}
             </div>
             <button 
               onClick={nextSlide}
               className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+              aria-label="Следующий слайд"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
