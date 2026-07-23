@@ -221,6 +221,7 @@ export default function Services({ currentCity }: ServicesProps) {
                   value={activeCategory}
                   onChange={(e) => setActiveCategory(e.target.value)}
                   className="w-full appearance-none bg-white border-2 border-slate-200 text-slate-900 font-bold text-base py-3.5 pl-12 pr-10 rounded-xl outline-none focus:border-[#8cc63f] focus:ring-4 focus:ring-[#8cc63f]/10 transition-all shadow-sm"
+                  aria-label="Выберите категорию услуг"
                 >
                   {services.map((service) => (
                     <option key={service.category} value={service.category}>
@@ -339,6 +340,7 @@ export default function Services({ currentCity }: ServicesProps) {
                 <button 
                   onClick={() => setIsModalOpen(false)}
                   className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-colors shadow-sm flex-shrink-0"
+                  aria-label="Закрыть прайс-лист"
                 >
                   <X className="w-5 h-5" />
                 </button>

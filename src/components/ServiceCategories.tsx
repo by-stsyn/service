@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 
 const CATEGORIES = [
   {
@@ -40,8 +41,33 @@ const CATEGORIES = [
 ];
 
 export default function ServiceCategories() {
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Автосервис",
+    "provider": {
+      "@type": "AutoRepair",
+      "name": "Мультисервис Прагматика"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Направления работы автосервиса",
+      "itemListElement": CATEGORIES.map((category, index) => ({
+        "@type": "OfferCatalog",
+        "position": index + 1,
+        "name": category.title,
+        "description": category.description
+      }))
+    }
+  };
+
   return (
     <section id="categories" className="py-20 bg-slate-50">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(serviceSchema)}
+        </script>
+      </Helmet>
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 tracking-tight">
           Направления работы
