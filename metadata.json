@@ -1,0 +1,8 @@
+{
+  "name": "Pragmatika Service Landing",
+  "description": "MVP Landing page for multi-brand car service with services, offers, and booking form.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
