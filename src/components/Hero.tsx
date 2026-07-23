@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -125,12 +125,17 @@ export default function Hero({ currentCity }: { currentCity: any }) {
   const slideVariants = {
     enter: (direction: number) => ({
       x: direction > 0 ? '100%' : '-100%',
+      opacity: 0.5
     }),
     center: {
       x: 0,
+      opacity: 1,
+      zIndex: 1,
     },
     exit: (direction: number) => ({
-      x: direction < 0 ? '100%' : '-100%',
+      x: direction > 0 ? '-100%' : '100%',
+      opacity: 0.5,
+      zIndex: 0,
     })
   };
 
@@ -144,7 +149,7 @@ export default function Hero({ currentCity }: { currentCity: any }) {
           initial="enter"
           animate="center"
           exit="exit"
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
           className="absolute inset-0"
         >
           {slides[currentIndex].imageUrl && (
