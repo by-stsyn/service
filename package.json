@@ -13,6 +13,7 @@
   "reactSnap": {
     "source": "dist",
     "include": [
+      "/",
       "/spb",
       "/pskov",
       "/ptz",
@@ -30,7 +31,6 @@
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
-    "express": "^4.21.2",
     "lucide-react": "^1.26.0",
     "motion": "^12.23.24",
     "papaparse": "^5.5.4",
@@ -48,7 +48,10 @@
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
+    "express": "^5.2.1",
+    "react-router-dom": "^7.18.1",
     "react-snap": "^1.23.0",
+    "sirv": "^3.0.2",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

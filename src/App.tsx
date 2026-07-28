@@ -1,22 +1,25 @@
+import React, { Suspense } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ServiceCategories from './components/ServiceCategories';
-import Services from './components/Services';
-import SpecialOffers from './components/SpecialOffers';
-import Calculator from './components/Calculator';
-import BrandsMarquee from './components/BrandsMarquee';
-import DiscountBlock from './components/DiscountBlock';
-import Reviews from './components/Reviews';
-import FAQ from './components/FAQ';
-import QuestionForm from './components/QuestionForm';
-import About from './components/About';
-import Contacts from './components/Contacts';
-import Footer from './components/Footer';
-import BookingModal from './components/BookingModal';
 import { CITIES_DATA, ADDRESSES } from './data';
 import { ModalProvider } from './contexts/ModalContext';
+
+const Services = React.lazy(() => import('./components/Services'));
+const SpecialOffers = React.lazy(() => import('./components/SpecialOffers'));
+const Calculator = React.lazy(() => import('./components/Calculator'));
+const BrandsMarquee = React.lazy(() => import('./components/BrandsMarquee'));
+const DiscountBlock = React.lazy(() => import('./components/DiscountBlock'));
+const Reviews = React.lazy(() => import('./components/Reviews'));
+const FAQ = React.lazy(() => import('./components/FAQ'));
+const QuestionForm = React.lazy(() => import('./components/QuestionForm'));
+const About = React.lazy(() => import('./components/About'));
+const BeforeAfter = React.lazy(() => import('./components/BeforeAfter'));
+const Contacts = React.lazy(() => import('./components/Contacts'));
+const Footer = React.lazy(() => import('./components/Footer'));
+const BookingModal = React.lazy(() => import('./components/BookingModal'));
 
 function MainContent() {
   const { citySlug } = useParams();
@@ -95,19 +98,24 @@ function MainContent() {
       <main className="flex-grow flex flex-col">
         <Hero currentCity={currentCity} />
         <ServiceCategories />
-        <Services currentCity={currentCity} />
-        <SpecialOffers currentCity={currentCity} />
-        <Calculator />
-        <BrandsMarquee />
-        <DiscountBlock currentCity={currentCity} />
-        <About />
-        <Reviews />
-        <FAQ />
-        <QuestionForm currentCity={currentCity} />
-        <Contacts currentCity={currentCity} />
+        <Suspense fallback={<div className="h-20 w-full flex items-center justify-center">Загрузка...</div>}>
+          <Services currentCity={currentCity} />
+          <SpecialOffers currentCity={currentCity} />
+          <Calculator />
+          <BrandsMarquee />
+          <DiscountBlock currentCity={currentCity} />
+          <About />
+          <BeforeAfter />
+          <Reviews />
+          <FAQ />
+          <QuestionForm currentCity={currentCity} />
+          <Contacts currentCity={currentCity} />
+        </Suspense>
       </main>
-      <Footer />
-      <BookingModal currentCity={currentCity} />
+      <Suspense fallback={null}>
+        <Footer currentCity={currentCity} />
+        <BookingModal currentCity={currentCity} />
+      </Suspense>
     </ModalProvider>
   );
 }

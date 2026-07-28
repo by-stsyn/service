@@ -150,7 +150,7 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
                     />
                   </div>
                   <label htmlFor="consent-question" className="text-xs text-slate-500 leading-tight cursor-pointer">
-                    Я даю согласие группе компаний «Прагматика» на <a href="#" className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
+                    Я даю согласие группе компаний «Прагматика» на <a href="/service.pdf" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
                   </label>
                 </div>
               </form>
@@ -165,7 +165,8 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
             <div className="absolute z-10 w-full h-[140%] flex items-center justify-center pointer-events-none">
               <img 
                 src="/qa.png" 
-                alt="Вопросы" 
+                alt="Вопросы"
+                loading="lazy"
                 className="w-full max-w-[280px] lg:max-w-[340px] h-full object-contain drop-shadow-2xl"
               />
             </div>

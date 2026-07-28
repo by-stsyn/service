@@ -163,7 +163,7 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                     />
                   </div>
                   <label htmlFor="consent-discount" className="text-xs text-slate-500 leading-tight cursor-pointer">
-                    Я даю согласие группе компаний «Прагматика» на <a href="#" className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
+                    Я даю согласие группе компаний «Прагматика» на <a href="/service.pdf" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
                   </label>
                 </div>
               </form>
@@ -175,6 +175,7 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
             <img 
               src="/form-pic.png" 
               alt="Сервисный центр" 
+              loading="lazy"
               className="w-full h-auto object-contain"
             />
           </div>

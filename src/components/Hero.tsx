@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 // СЮДА НУЖНО ВСТАВИТЬ ID ВАШЕЙ ТАБЛИЦЫ
 // ID находится в URL таблицы между /d/ и /edit
-const GOOGLE_SHEET_ID = '1iLLl0JrdunoBljWKJ2LlSqHWbC6YJTYG0HqKDaSDBAo';
+const GOOGLE_SHEET_ID = '';
 
 interface Slide {
   title: string;

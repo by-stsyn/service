@@ -193,6 +193,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
             </button>
             <button 
               onClick={() => setIsMobileMenuOpen(true)} 
+              aria-label="Открыть меню"
               className="p-1 -mr-1 text-slate-600 hover:text-slate-900 transition-colors flex items-center justify-center"
             >
               <Menu className="w-7 h-7" />
@@ -227,6 +228,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
                 </div>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Закрыть меню"
                   className="p-2 text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 rounded-xl"
                 >
                   <CloseIcon className="w-5 h-5" />

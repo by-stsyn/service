@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, CheckCircle, Loader2 } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
 import PhoneInput from './PhoneInput';
@@ -7,6 +7,42 @@ import { ADDRESSES } from '../data';
 export default function BookingModal({ currentCity }: { currentCity?: any }) {
   const { isModalOpen, closeModal, subject } = useModal();
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [selectedService, setSelectedService] = useState('');
+
+  useEffect(() => {
+    if (isModalOpen) {
+      if (subject) {
+        let initialService = subject.replace('Запись на услугу: ', '');
+        const allowed = ["Техническое обслуживание и ремонт", "Диагностика", "Кузовной ремонт", "Детейлинг", "Дополнительное оборудование", "Шиномонтаж", "Другое"];
+        if (!allowed.includes(initialService)) {
+           initialService = "";
+        }
+        setSelectedService(initialService);
+      } else {
+        setSelectedService('');
+      }
+    }
+  }, [isModalOpen, subject]);
+
+  const getModalTitle = () => {
+    const formatService = (service: string) => {
+      const s = service.toLowerCase();
+      if (s === 'диагностика') return 'диагностику';
+      if (s === 'дополнительное оборудование') return 'установку дополнительного оборудования';
+      return s;
+    };
+
+    if (selectedService && selectedService !== 'Другое') {
+      return `Запись на ${formatService(selectedService)}`;
+    }
+    if (subject) {
+      if (subject.startsWith('Запись на услугу: ')) {
+        return `Запись на ${formatService(subject.replace('Запись на услугу: ', ''))}`;
+      }
+      return subject;
+    }
+    return 'Записаться на сервис';
+  };
 
   if (!isModalOpen) return null;
 
@@ -21,7 +57,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
     
     // Config for Web3Forms
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
-    formData.append('subject', 'Новая заявка лендинг Мультисервис');
+    formData.append('subject', `Заявка с сайта Мультисервис: ${getModalTitle()}`);
     
     if (currentCity?.name) {
       formData.append('City', currentCity.name);
@@ -66,7 +102,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
         {/* Left Side: Form */}
         <div className="w-full md:w-[55%] flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar">
           <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-8">
-            Записаться на сервис
+            {getModalTitle()}
           </h3>
 
           {status === 'success' ? (
@@ -106,7 +142,8 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                 <select 
                   name="service"
                   required
-                  defaultValue={subject ? subject.replace('Запись на услугу: ', '') : ''}
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
                   className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
                 >
                   <option value="" disabled>Укажите услугу*</option>
@@ -181,7 +218,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                   />
                 </div>
                 <label htmlFor="consent-modal" className="text-xs text-slate-500 leading-tight cursor-pointer">
-                  Я даю согласие группе компаний «Прагматика» на <a href="#" className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
+                  Я даю согласие группе компаний «Прагматика» на <a href="/service.pdf" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
                 </label>
               </div>
             </form>
@@ -193,6 +230,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
           <img 
             src="/form-pic.png" 
             alt="Запись на сервис" 
+            loading="lazy"
             className="w-full h-auto object-contain"
           />
         </div>
