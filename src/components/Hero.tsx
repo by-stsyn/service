@@ -50,7 +50,9 @@ export default function Hero({ currentCity }: { currentCity: any }) {
       setLoading(true);
       
       const callbackName = `gvizCallback_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
-      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(currentCity.sheetName)}`;
+      
+      const sheetParam = currentCity.sheetGid ? `gid=${currentCity.sheetGid}` : `sheet=${encodeURIComponent(currentCity.sheetName)}`;
+      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&${sheetParam}`;
       
       (window as any)[callbackName] = async (data: any) => {
         try {

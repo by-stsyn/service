@@ -1,10 +1,10 @@
 export const CITIES_DATA = [
-  { slug: 'spb', name: 'Санкт-Петербург', sheetName: 'Санкт-Петербург' },
-  { slug: 'pskov', name: 'Псков', sheetName: 'Псков' },
-  { slug: 'ptz', name: 'Петрозаводск', sheetName: 'Петрозаводск' },
-  { slug: 'murmansk', name: 'Мурманск', sheetName: 'Мурманск' },
-  { slug: 'vluki', name: 'Великие Луки', sheetName: 'Великие Луки' },
-  { slug: 'novgorod', name: 'Великий Новгород', sheetName: 'Великий Новгород' }
+  { slug: 'spb', name: 'Санкт-Петербург', sheetName: 'Санкт-Петербург', sheetGid: '0' },
+  { slug: 'pskov', name: 'Псков', sheetName: 'Псков', sheetGid: '795610385' },
+  { slug: 'ptz', name: 'Петрозаводск', sheetName: 'Петрозаводск', sheetGid: '1785193406' },
+  { slug: 'murmansk', name: 'Мурманск', sheetName: 'Мурманск', sheetGid: '984608600' },
+  { slug: 'vluki', name: 'Великие Луки', sheetName: 'Великие Луки', sheetGid: '669329624' },
+  { slug: 'novgorod', name: 'Великий Новгород', sheetName: 'Великий Новгород', sheetGid: '1137674779' }
 ];
 
 export const CITIES = CITIES_DATA.map(c => c.name);
