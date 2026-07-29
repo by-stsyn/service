@@ -52,21 +52,57 @@ export default function Hero({ currentCity }: { currentCity: any }) {
       const callbackName = `gvizCallback_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
       const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(currentCity.sheetName)}`;
       
-      (window as any)[callbackName] = (data: any) => {
+      (window as any)[callbackName] = async (data: any) => {
         try {
           console.log('Данные из таблицы успешно получены:', data);
           const rows = data.table?.rows?.slice(1) || [];
-          const parsedSlides = rows.map((row: any) => {
+          
+          const resolveImageUrl = async (url: string): Promise<string> => {
+            if (!url) return '';
+            const str = url.trim();
+            
+            // Преобразование ссылки Google Drive в прямую ссылку на картинку
+            const gDriveMatch = str.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (gDriveMatch && gDriveMatch[1]) {
+              return `https://lh3.googleusercontent.com/d/${gDriveMatch[1]}=w1920`;
+            }
+            const gDriveOpenMatch = str.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+            if (gDriveOpenMatch && gDriveOpenMatch[1]) {
+              return `https://lh3.googleusercontent.com/d/${gDriveOpenMatch[1]}=w1920`;
+            }
+
+            // Яндекс Диск
+            if (str.includes('disk.yandex.ru/i/') || str.includes('disk.yandex.ru/d/') || str.includes('yadi.sk/')) {
+              try {
+                const res = await fetch(`https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=${encodeURIComponent(str)}`);
+                if (res.ok) {
+                  const apiData = await res.json();
+                  if (apiData && apiData.href) {
+                    return apiData.href;
+                  }
+                }
+              } catch (e) {
+                console.error('Ошибка получения прямой ссылки Яндекс Диск:', e);
+              }
+            }
+            
+            return str;
+          };
+
+          const slidePromises = rows.map(async (row: any) => {
             const cells = row.c || [];
             return {
               title: cells[0]?.v || '',
               description: cells[1]?.v || '',
               buttonText: cells[2]?.v || '',
               buttonLink: cells[3]?.v || '',
-              imageUrl: cells[4]?.v || '',
-              mobileImageUrl: cells[5]?.v || ''
+              imageUrl: await resolveImageUrl(cells[4]?.v || ''),
+              mobileImageUrl: await resolveImageUrl(cells[5]?.v || '')
             };
-          }).filter((slide: Slide) => slide.buttonText);
+          });
+
+          const allSlides = await Promise.all(slidePromises);
+          const parsedSlides = allSlides.filter((slide: Slide) => slide.buttonText);
 
           if (parsedSlides.length > 0) {
             setSlides(parsedSlides);
