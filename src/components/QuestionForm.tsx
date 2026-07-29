@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import PhoneInput from './PhoneInput';
 import { ADDRESSES } from '../data';
+import { useToast } from '../contexts/ToastContext';
 
 export default function QuestionForm({ currentCity }: { currentCity?: any }) {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const { showToast } = useToast();
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const currentAddresses = currentCity ? ADDRESSES.find(a => a.city === currentCity.name)?.addresses || [] : [];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,7 +17,7 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
     const formData = new FormData(form);
     
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
-    formData.append('subject', 'Новая заявка лендинг Мультисервис');
+    formData.append('subject', 'Новая заявка на Мультисервис');
     formData.append('Source', 'Вопрос с сайта (Блок "Остались вопросы")');
     
     if (currentCity?.name) {
@@ -29,7 +31,8 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
       });
       const data = await res.json();
       if (data.success) {
-        setStatus('success');
+        showToast('Ваш вопрос получен. Наш менеджер свяжется с вами в ближайшее время.');
+        setStatus('idle');
         form.reset();
       } else {
         setStatus('error');
@@ -51,19 +54,10 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
             </h3>
             <div className="mb-6"></div>
 
-            {status === 'success' ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center h-full">
-                <div className="w-20 h-20 bg-[#8cc63f]/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
-                  <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
-                </div>
-                <h4 className="text-2xl font-bold text-slate-900 mb-2">Заявка принята!</h4>
-                <p className="text-slate-600 font-medium">Ваш вопрос получен. Наш менеджер свяжется с вами в ближайшее время.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div>
-                  <input 
-                    name="name"
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div>
+                <input 
+                  name="name"
                     type="text" 
                     placeholder="Введите ФИО*" 
                     required
@@ -154,7 +148,7 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
                   </label>
                 </div>
               </form>
-            )}
+
           </div>
 
           {/* Right side: Decorative Image */}

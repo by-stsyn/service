@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 // СЮДА НУЖНО ВСТАВИТЬ ID ВАШЕЙ ТАБЛИЦЫ
 // ID находится в URL таблицы между /d/ и /edit
-const GOOGLE_SHEET_ID = '';
+const GOOGLE_SHEET_ID = '1iLLl0JrdunoBljWKJ2LlSqHWbC6YJTYG0HqKDaSDBAo';
 
 interface Slide {
   title: string;
@@ -42,53 +42,61 @@ export default function Hero({ currentCity }: { currentCity: any }) {
   const { openModal } = useModal();
 
   useEffect(() => {
-    async function fetchSlides() {
+    function fetchSlides() {
       if (!GOOGLE_SHEET_ID) {
         setLoading(false);
         return;
       }
-      try {
-        setLoading(true);
-        const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(currentCity.sheetName)}`;
-        const response = await fetch(url);
-        const text = await response.text();
-        
-        // Extract JSON part
-        const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
-        const data = JSON.parse(jsonString);
-        
-        console.log('Данные из таблицы успешно получены:', data);
+      setLoading(true);
+      
+      const callbackName = `gvizCallback_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+      const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(currentCity.sheetName)}`;
+      
+      (window as any)[callbackName] = (data: any) => {
+        try {
+          console.log('Данные из таблицы успешно получены:', data);
+          const rows = data.table?.rows?.slice(1) || [];
+          const parsedSlides = rows.map((row: any) => {
+            const cells = row.c || [];
+            return {
+              title: cells[0]?.v || '',
+              description: cells[1]?.v || '',
+              buttonText: cells[2]?.v || '',
+              buttonLink: cells[3]?.v || '',
+              imageUrl: cells[4]?.v || '',
+              mobileImageUrl: cells[5]?.v || ''
+            };
+          }).filter((slide: Slide) => slide.buttonText);
 
-        // Skip first row assuming it contains headers
-        const rows = data.table?.rows?.slice(1) || [];
-        
-        const parsedSlides = rows.map((row: any) => {
-          const cells = row.c || [];
-          return {
-            title: cells[0]?.v || '',
-            description: cells[1]?.v || '',
-            buttonText: cells[2]?.v || '',
-            buttonLink: cells[3]?.v || '',
-            imageUrl: cells[4]?.v || '',
-            mobileImageUrl: cells[5]?.v || ''
-          };
-        }).filter((slide: Slide) => slide.buttonText);
-
-        console.log('Сформированные слайды:', parsedSlides);
-
-        if (parsedSlides.length > 0) {
-          setSlides(parsedSlides);
-        } else {
-          console.warn('Не удалось найти валидные слайды (нужен текст на кнопке), используем дефолтные');
+          if (parsedSlides.length > 0) {
+            setSlides(parsedSlides);
+          } else {
+            console.warn('Не удалось найти валидные слайды (нужен текст на кнопке), используем дефолтные');
+            setSlides(DEFAULT_SLIDES);
+          }
+        } catch (err) {
+          console.error('Ошибка обработки данных JSONP:', err);
           setSlides(DEFAULT_SLIDES);
+        } finally {
+          setLoading(false);
+          setCurrentIndex(0);
+          delete (window as any)[callbackName];
+          document.getElementById(callbackName)?.remove();
         }
-      } catch (error) {
-        console.error('Ошибка при загрузке данных из Google Sheets:', error);
+      };
+
+      const script = document.createElement('script');
+      script.id = callbackName;
+      script.src = url;
+      script.onerror = (error) => {
+        console.error('Ошибка при загрузке скрипта JSONP (Failed to fetch):', error);
         setSlides(DEFAULT_SLIDES);
-      } finally {
         setLoading(false);
         setCurrentIndex(0);
-      }
+        delete (window as any)[callbackName];
+        script.remove();
+      };
+      document.body.appendChild(script);
     }
 
     fetchSlides();

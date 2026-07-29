@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { X, CheckCircle, Loader2 } from 'lucide-react';
 import { useModal } from '../contexts/ModalContext';
+import { useToast } from '../contexts/ToastContext';
 import PhoneInput from './PhoneInput';
 import { ADDRESSES } from '../data';
 
 export default function BookingModal({ currentCity }: { currentCity?: any }) {
   const { isModalOpen, closeModal, subject } = useModal();
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const { showToast } = useToast();
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [selectedService, setSelectedService] = useState('');
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
     
     // Config for Web3Forms
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
-    formData.append('subject', `Заявка с сайта Мультисервис: ${getModalTitle()}`);
+    formData.append('subject', 'Новая заявка на Мультисервис');
     
     if (currentCity?.name) {
       formData.append('City', currentCity.name);
@@ -70,11 +72,9 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
       });
       const data = await res.json();
       if (data.success) {
-        setStatus('success');
-        setTimeout(() => {
-          setStatus('idle');
-          closeModal();
-        }, 3000);
+        showToast('Наш менеджер свяжется с вами в ближайшее время.');
+        setStatus('idle');
+        closeModal();
       } else {
         setStatus('error');
       }
@@ -105,19 +105,10 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
             {getModalTitle()}
           </h3>
 
-          {status === 'success' ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center h-full">
-              <div className="w-20 h-20 bg-[#8cc63f]/10 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
-              </div>
-              <h4 className="text-2xl font-bold text-slate-900 mb-2">Заявка отправлена!</h4>
-              <p className="text-slate-600 font-medium">Наш менеджер свяжется с вами в ближайшее время.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input type="hidden" name="Source" value="Заявка с сайта (Модальное окно)" />
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <input type="hidden" name="Source" value="Заявка с сайта (Модальное окно)" />
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <input 
                     name="name"
@@ -222,7 +213,6 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                 </label>
               </div>
             </form>
-          )}
         </div>
 
         {/* Right Side: Decorative Image */}

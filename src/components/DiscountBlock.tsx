@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import PhoneInput from './PhoneInput';
 import { ADDRESSES } from '../data';
+import { useToast } from '../contexts/ToastContext';
 
 export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const { showToast } = useToast();
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
 
   const currentAddresses = currentCity ? ADDRESSES.find(a => a.city === currentCity.name)?.addresses || [] : [];
 
@@ -16,7 +18,7 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
     const formData = new FormData(form);
     
     formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
-    formData.append('subject', 'Новая заявка лендинг Мультисервис');
+    formData.append('subject', 'Новая заявка на Мультисервис');
     formData.append('Source', 'Заявка на скидку (Первый визит)');
     
     if (currentCity?.name) {
@@ -30,11 +32,9 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
       });
       const data = await res.json();
       if (data.success) {
-        setStatus('success');
-        setTimeout(() => {
-          setStatus('idle');
-          form.reset();
-        }, 4000);
+        showToast('Скидка успешно зафиксирована. Наш менеджер перезвонит вам в ближайшее время.');
+        setStatus('idle');
+        form.reset();
       } else {
         setStatus('error');
       }
@@ -54,19 +54,10 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
               Записаться на сервис
             </h3>
 
-            {status === 'success' ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center h-full">
-                <div className="w-20 h-20 bg-[#8cc63f]/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
-                  <CheckCircle className="w-10 h-10 text-[#8cc63f]" />
-                </div>
-                <h4 className="text-2xl font-bold text-slate-900 mb-2">Заявка принята!</h4>
-                <p className="text-slate-600 font-medium">Скидка успешно зафиксирована. Наш менеджер перезвонит вам в ближайшее время.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <input 
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <input 
                       name="name"
                       type="text" 
                       placeholder="Введите ФИО*" 
@@ -167,7 +158,6 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                   </label>
                 </div>
               </form>
-            )}
           </div>
 
           {/* Right side: Decorative Image */}

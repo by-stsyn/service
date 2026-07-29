@@ -6,6 +6,7 @@ import Hero from './components/Hero';
 import ServiceCategories from './components/ServiceCategories';
 import { CITIES_DATA, ADDRESSES } from './data';
 import { ModalProvider } from './contexts/ModalContext';
+import { ToastProvider } from './contexts/ToastContext';
 
 const Services = React.lazy(() => import('./components/Services'));
 const SpecialOffers = React.lazy(() => import('./components/SpecialOffers'));
@@ -82,9 +83,10 @@ function MainContent() {
   };
 
   return (
-    <ModalProvider>
-      <Helmet>
-        <title>{pageTitle}</title>
+    <ToastProvider>
+      <ModalProvider>
+        <Helmet>
+          <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <link rel="canonical" href={pageUrl} />
         <meta property="og:title" content={pageTitle} />
@@ -116,7 +118,8 @@ function MainContent() {
         <Footer currentCity={currentCity} />
         <BookingModal currentCity={currentCity} />
       </Suspense>
-    </ModalProvider>
+      </ModalProvider>
+    </ToastProvider>
   );
 }
 
