@@ -23,6 +23,15 @@ export default defineConfig(() => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+                return 'react-vendor';
+              }
+              if (id.includes('lucide-react')) {
+                return 'lucide';
+              }
+              if (id.includes('motion')) {
+                return 'motion';
+              }
               return 'vendor';
             }
           }

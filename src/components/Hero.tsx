@@ -38,7 +38,6 @@ export default function Hero({ currentCity }: { currentCity: any }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [autoplay, setAutoplay] = useState(true);
   const { openModal } = useModal();
 
   useEffect(() => {
@@ -141,21 +140,19 @@ export default function Hero({ currentCity }: { currentCity: any }) {
   }, [currentCity.sheetName]);
 
   useEffect(() => {
-    if (slides.length <= 1 || !autoplay) return;
-    const timer = setInterval(() => {
+    if (slides.length <= 1) return;
+    const timer = setTimeout(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 10000);
-    return () => clearInterval(timer);
-  }, [slides.length, autoplay]);
+    return () => clearTimeout(timer);
+  }, [slides.length, currentIndex]);
 
   const nextSlide = () => {
-    setAutoplay(false);
     setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % slides.length);
   };
   const prevSlide = () => {
-    setAutoplay(false);
     setDirection(-1);
     setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
@@ -187,6 +184,7 @@ export default function Hero({ currentCity }: { currentCity: any }) {
 
   return (
     <section id="home" className="relative w-full h-[500px] sm:h-[550px] overflow-hidden flex-shrink-0 bg-slate-900 group">
+      <h1 className="sr-only">Автосервис Прагматика Мультисервис в г. {currentCity.name}. Ремонт, ТО, диагностика автомобилей.</h1>
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentIndex}
@@ -217,11 +215,11 @@ export default function Hero({ currentCity }: { currentCity: any }) {
           <div className="absolute inset-0 flex items-center">
             <div className="px-4 sm:px-8 max-w-4xl mx-auto xl:mx-0 xl:ml-16 w-full">
               {slides[currentIndex].title && (
-                <h1 
+                <h2 
                   className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-none max-w-3xl tracking-tight uppercase drop-shadow-md"
                 >
                   {slides[currentIndex].title}
-                </h1>
+                </h2>
               )}
               {slides[currentIndex].description && (
                 <p 
@@ -273,7 +271,6 @@ export default function Hero({ currentCity }: { currentCity: any }) {
                 <button
                   key={idx}
                   onClick={() => {
-                    setAutoplay(false);
                     setDirection(idx > currentIndex ? 1 : -1);
                     setCurrentIndex(idx);
                   }}
