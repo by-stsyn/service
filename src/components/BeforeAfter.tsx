@@ -51,9 +51,10 @@ export default function BeforeAfter() {
               <div className="absolute inset-0">
                 <img 
                   src={currentPair.after}
-                  alt="После ремонта" 
+                  alt="Автомобиль после кузовного ремонта в Прагматика Мультисервис" 
                   className="w-full h-full object-cover"
                   draggable="false"
+                  loading="lazy"
                 />
               </div>
 
@@ -64,9 +65,10 @@ export default function BeforeAfter() {
               >
                 <img 
                   src={currentPair.before}
-                  alt="До ремонта" 
+                  alt="Автомобиль до ремонта" 
                   className="w-full h-full object-cover"
                   draggable="false"
+                  loading="lazy"
                 />
               </div>
             </motion.div>

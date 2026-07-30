@@ -222,7 +222,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
         <div className="hidden md:flex md:w-[45%] relative bg-white items-center justify-center p-8 lg:p-12 overflow-hidden">
           <img 
             src="/form-pic.png" 
-            alt="Запись на сервис" 
+            alt="Онлайн запись в мультибрендовый автосервис Прагматика" 
             loading="lazy"
             className="w-full h-auto object-contain"
           />

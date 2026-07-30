@@ -46,8 +46,9 @@ export default function Footer({ currentCity }: { currentCity?: any }) {
           <div className="flex flex-col gap-6 lg:col-span-1">
             <img 
               src="/logo.png" 
-              alt="Прагматика" 
+              alt="Автосервис Прагматика Мультисервис" 
               className="h-8 object-contain w-[140px] object-left"
+              loading="lazy"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="24"><rect width="60" height="24" fill="%23f1f5f9" rx="4"/><text x="30" y="16" font-family="sans-serif" font-size="10" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO</text></svg>';
               }} 

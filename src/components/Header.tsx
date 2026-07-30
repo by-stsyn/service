@@ -60,9 +60,9 @@ export default function Header({ currentCity }: { currentCity: any }) {
           <div className="flex items-center gap-4">
             <a href="#home" onClick={handleScroll} className="flex-shrink-0 group">
               <img 
-                src="/logo.png" 
-                alt="Прагматика Сервис" 
-                className={`transition-all duration-300 object-contain origin-left ${isScrolled ? 'h-8' : 'h-10'}`} 
+              src="/logo.png" 
+              alt="Автосервис Прагматика Мультисервис" 
+              className={`transition-all duration-300 object-contain origin-left ${isScrolled ? 'h-8' : 'h-10'}`} 
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40"><rect width="120" height="40" fill="%23f1f5f9" rx="4"/><text x="60" y="24" font-family="sans-serif" font-size="12" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO PUBLIC</text></svg>';
                 }} 
@@ -156,7 +156,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
           <a href="#home" onClick={handleScroll} className="flex-shrink-0 flex items-center">
             <img 
               src="/logo.png" 
-              alt="Прагматика Сервис" 
+              alt="Автосервис Прагматика Мультисервис" 
               className="h-7 object-contain max-w-[140px]" 
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="28"><rect width="100" height="28" fill="%23f1f5f9" rx="4"/><text x="50" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO</text></svg>';
