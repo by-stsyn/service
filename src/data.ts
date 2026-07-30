@@ -59,7 +59,7 @@ export const ADDRESSES = [
   { 
     city: 'Псков', 
     phone: '8 800 551-19-67',
-    addresses: ['Рижский проспект, 82'],
+    addresses: ['ул. Леона Поземского, 112'],
     mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A1ec3efa572b3fc2d2c1632b7a2aeb500fd1cb13fa3b6aca4f1e0f707a72ec101&source=constructor'
   },
   { 

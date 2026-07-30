@@ -44,9 +44,9 @@ export default function About() {
           <div className="bg-slate-50 border border-slate-100 p-6 sm:p-10 rounded-xl flex flex-col justify-center hover:border-slate-200 transition-colors">
             <Map className="w-10 h-10 text-[#8cc63f] mb-6" />
             <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">5<span className="text-[#8cc63f]">+</span>5</span>
+              <span className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">10</span>
             </div>
-            <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">сервисных центров<br/>в СПб и регионах</div>
+            <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">сервисных центров<br/>в СЗФО</div>
           </div>
 
           {/* 4. Честность */}

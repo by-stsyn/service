@@ -138,7 +138,7 @@ export default function Reviews() {
       <div className="px-4 sm:px-8 max-w-5xl mx-auto relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
           <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 uppercase tracking-tight">
-            Истории <span className="text-[#8cc63f]">наших клиентов</span>
+            Отзывы <span className="text-[#8cc63f]">наших клиентов</span>
           </h2>
           <p className="text-lg text-slate-600 font-medium">
             Мы не просто чиним автомобили, мы решаем проблемы. Почитайте реальные отзывы людей, которые доверили нам свои авто.
