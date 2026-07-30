@@ -1,6 +1,6 @@
 import {StrictMode} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
-import { HashRouter } from 'react-router';
+import { BrowserRouter } from 'react-router';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App.tsx';
 import './index.css';
@@ -12,9 +12,9 @@ if (rootElement.hasChildNodes()) {
     rootElement,
     <StrictMode>
       <HelmetProvider>
-        <HashRouter>
+        <BrowserRouter>
           <App />
-        </HashRouter>
+        </BrowserRouter>
       </HelmetProvider>
     </StrictMode>
   );
@@ -22,9 +22,9 @@ if (rootElement.hasChildNodes()) {
   createRoot(rootElement).render(
     <StrictMode>
       <HelmetProvider>
-        <HashRouter>
+        <BrowserRouter>
           <App />
-        </HashRouter>
+        </BrowserRouter>
       </HelmetProvider>
     </StrictMode>
   );

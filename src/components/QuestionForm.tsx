@@ -159,7 +159,7 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
             <div className="absolute z-10 w-full h-[140%] flex items-center justify-center pointer-events-none">
               <img 
                 src="/qa.png" 
-                alt="Консультант автосервиса Прагматика отвечает на вопросы"
+                alt="Вопросы"
                 loading="lazy"
                 className="w-full max-w-[280px] lg:max-w-[340px] h-full object-contain drop-shadow-2xl"
               />
