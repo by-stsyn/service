@@ -2,7 +2,6 @@ const NAV_LINKS = [
   { label: 'Главная', href: '#home' },
   { label: 'Услуги и цены', href: '#services' },
   { label: 'Акции', href: '#offers' },
-  { label: 'Калькулятор ТО', href: '#calculator' },
   { label: 'О нас', href: '#about' },
   { label: 'Отзывы', href: '#reviews' },
   { label: 'Вопросы-Ответы', href: '#faq' },

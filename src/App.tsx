@@ -10,7 +10,6 @@ import { ToastProvider } from './contexts/ToastContext';
 
 const Services = React.lazy(() => import('./components/Services'));
 const SpecialOffers = React.lazy(() => import('./components/SpecialOffers'));
-const Calculator = React.lazy(() => import('./components/Calculator'));
 const BrandsMarquee = React.lazy(() => import('./components/BrandsMarquee'));
 const DiscountBlock = React.lazy(() => import('./components/DiscountBlock'));
 const Reviews = React.lazy(() => import('./components/Reviews'));
@@ -105,7 +104,6 @@ function MainContent() {
         <Suspense fallback={<div className="h-20 w-full flex items-center justify-center">Загрузка...</div>}>
           <Services currentCity={currentCity} />
           <SpecialOffers currentCity={currentCity} />
-          <Calculator />
           <BrandsMarquee />
           <DiscountBlock currentCity={currentCity} />
           <About />

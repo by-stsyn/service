@@ -15,7 +15,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
     if (isModalOpen) {
       if (subject) {
         let initialService = subject.replace('Запись на услугу: ', '');
-        const allowed = ["Техническое обслуживание и ремонт", "Диагностика", "Кузовной ремонт", "Детейлинг", "Дополнительное оборудование", "Шиномонтаж", "Запись на сервис"];
+        const allowed = ["Техническое обслуживание и ремонт", "Диагностика", "Кузовной ремонт", "Детейлинг и мойка", "Дополнительное оборудование", "Шиномонтаж", "Другое"];
         if (!allowed.includes(initialService)) {
            initialService = "";
         }
@@ -31,6 +31,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
       const s = service.toLowerCase();
       if (s === 'диагностика') return 'диагностику';
       if (s === 'дополнительное оборудование') return 'установку дополнительного оборудования';
+      if (s === 'детейлинг и мойка') return 'детейлинг и мойку';
       return s;
     };
 
@@ -144,10 +145,10 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                   <option value="Техническое обслуживание и ремонт">Техническое обслуживание и ремонт</option>
                   <option value="Диагностика">Диагностика</option>
                   <option value="Кузовной ремонт">Кузовной ремонт</option>
-                  <option value="Детейлинг">Детейлинг</option>
+                  <option value="Детейлинг и мойка">Детейлинг и мойка</option>
                   <option value="Дополнительное оборудование">Дополнительное оборудование</option>
                   <option value="Шиномонтаж">Шиномонтаж</option>
-                  <option value="Запись на сервис">Запись на сервис</option>
+                  <option value="Другое">Другое</option>
                 </select>
               </div>
 

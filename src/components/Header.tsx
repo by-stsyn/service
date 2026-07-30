@@ -8,7 +8,6 @@ import { CITIES_DATA } from '../data';
 const MAIN_NAV_LINKS = [
   { label: 'Услуги и цены', href: '#services' },
   { label: 'Акции', href: '#offers' },
-  { label: 'Калькулятор ТО', href: '#calculator' },
   { label: 'Контакты', href: '#contacts' },
 ];
 
