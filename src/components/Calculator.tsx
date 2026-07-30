@@ -98,7 +98,6 @@ export default function Calculator() {
     });
     return initial;
   });
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   const handleSelect = (stepId: string, optionId: string) => {
     setSelections(prev => ({ ...prev, [stepId]: optionId }));
@@ -325,33 +324,6 @@ export default function Calculator() {
           <button onClick={() => openModal("Заявка из калькулятора ТО")} className="w-full sm:w-auto bg-[#8cc63f] hover:bg-[#7db435] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg active:scale-95">
             Оставить заявку
           </button>
-        </div>
-
-        {/* Compact Disclaimer */}
-        <div className="mt-8 text-center">
-          <button 
-            onClick={() => setShowDisclaimer(!showDisclaimer)}
-            className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors underline underline-offset-4"
-          >
-            {showDisclaimer ? 'Скрыть информацию' : 'Правовая информация'}
-          </button>
-          
-          <AnimatePresence>
-            {showDisclaimer && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden mt-4 text-left"
-              >
-                <div className="text-[10px] text-slate-400 leading-relaxed bg-slate-200/50 p-4 rounded-xl">
-                  <p className="font-semibold text-slate-500 mb-1">Санкт-Петербург</p>
-                  <p className="mb-2">* Стоимость услуг, указанная на сайте, может отличаться. Стоимость услуг указана за работы без учета стоимости зап.частей. Не является публичной офертой. Для получения подробной информации обращайтесь к сотрудникам компании. Указанные цены действуют только в г. Санкт-Петербург.</p>
-                  <p>г. Санкт-Петербург, Малая Балканская ул., д.57Б Дилерский центр "Прагматика Kia Купчино": АО "ПЛТ", ИНН 7816047126, ОГРН 1037835021113. Юридический адрес: 192289, Санкт-Петербург г, Малая Балканская ул, дом № 57. Дилерский центр "Прагматика Лада Купчино": ООО "Прагматика Лада", ИНН: 7816716659, ОГРН: 1217800056286. Юридический адрес: 192289, Санкт-Петербург г, Малая Балканская ул, дом № 57, корпус В. г. Санкт-Петербург, ул. Меркурьева, 6 (ООО "АВТОЦЕНТР ПАРНАС", ИНН 7802914957, ОГРН 1217800146651. Юридический адрес: 194358, Санкт-Петербург г, Парголово п, 4-й Верхний пер, дом № 1 А, корпус А). г. Санкт-Петербург, Уральская ул., д.33Б Дилерский центр "Прагматика Лада" (Васильевский остров): ООО "Прагматика", ИНН: 7801288506, ОГРН: 1157847303140. Юридический адрес: 199155, Санкт-Петербург г, Уральская ул, дом № 33, корпус Б. Дилерский центр "Прагматика Kia" (Васильевский остров): ООО «Василеостровский Автоцентр», ОГРН 1217800195964, ИНН 7801707718. Юридический адрес: 199155, г. Санкт-Петербург, ул. Уральская, д.35, лит. А, пом.48</p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
       </div>

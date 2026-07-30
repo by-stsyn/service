@@ -89,7 +89,7 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
                     <option value="Детейлинг">Детейлинг</option>
                     <option value="Дополнительное оборудование">Дополнительное оборудование</option>
                     <option value="Шиномонтаж">Шиномонтаж</option>
-                    <option value="Другое">Другое</option>
+                    <option value="Запись на сервис">Запись на сервис</option>
                   </select>
                 </div>
 

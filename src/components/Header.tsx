@@ -12,12 +12,6 @@ const MAIN_NAV_LINKS = [
   { label: 'Контакты', href: '#contacts' },
 ];
 
-const TOP_NAV_LINKS = [
-  { label: 'О компании', href: '#about' },
-  { label: 'Отзывы', href: '#reviews' },
-  { label: 'Вопросы и ответы', href: '#faq' },
-];
-
 export default function Header({ currentCity }: { currentCity: any }) {
   const { openModal } = useModal();
   const navigate = useNavigate();
@@ -60,21 +54,6 @@ export default function Header({ currentCity }: { currentCity: any }) {
 
   return (
     <>
-      {/* DESKTOP TOP BAR (Scrolls with page) */}
-      <div className="hidden lg:block bg-slate-100 border-b border-slate-200 py-1.5 relative z-50 text-xs">
-        <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="text-slate-500 font-medium">Сервисное обслуживание автомобилей любых марок</span>
-          </div>
-          
-          <div className="flex items-center gap-6 font-medium text-slate-500">
-            {TOP_NAV_LINKS.map(link => (
-              <a key={link.label} href={link.href} onClick={handleScroll} className="hover:text-slate-900 transition-colors">{link.label}</a>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* DESKTOP MAIN BAR (Sticky) */}
       <header className={`hidden lg:block sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-white border-b border-slate-100 py-5'}`}>
         <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
@@ -262,7 +241,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
 
               {/* Mobile Navigation */}
               <nav className="flex flex-col py-4 overflow-y-auto">
-                {[...MAIN_NAV_LINKS, ...TOP_NAV_LINKS].map(link => (
+                {MAIN_NAV_LINKS.map(link => (
                   <a 
                     key={link.label}
                     href={link.href} 
