@@ -95,6 +95,15 @@ export default function Footer({ currentCity }: { currentCity?: any }) {
                <p>
                  <a href="mailto:info@pragmatika-service.ru" className="hover:text-[#8cc63f] transition-colors">info@pragmatika-service.ru</a>
                </p>
+               
+               <div className="flex items-center gap-4 mt-2">
+                 <a href="https://t.me/Pragmatikabot" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                   <img src="/tg.png" alt="Telegram" className="w-8 h-8 object-contain" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="32" height="32" fill="%23f1f5f9" rx="16"/><text x="16" y="20" font-family="sans-serif" font-size="10" font-weight="bold" fill="%2364748b" text-anchor="middle">TG</text></svg>'; }} />
+                 </a>
+                 <a href="https://max.ru/id7816561934_bot" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                   <img src="/max.png" alt="Max" className="w-8 h-8 object-contain" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="32" height="32" fill="%23f1f5f9" rx="16"/><text x="16" y="20" font-family="sans-serif" font-size="10" font-weight="bold" fill="%2364748b" text-anchor="middle">MAX</text></svg>'; }} />
+                 </a>
+               </div>
              </div>
           </div>
         </div>

@@ -213,17 +213,17 @@ export default function Hero({ currentCity }: { currentCity: any }) {
           
           {/* Content */}
           <div className="absolute inset-0 flex items-center">
-            <div className="px-4 sm:px-8 max-w-4xl mx-auto xl:mx-0 xl:ml-16 w-full">
+            <div className="px-4 sm:px-8 max-w-4xl mx-auto xl:mx-0 xl:ml-16 w-full text-center xl:text-left">
               {slides[currentIndex].title && (
                 <h2 
-                  className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-none max-w-3xl tracking-tight uppercase drop-shadow-md"
+                  className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-none max-w-3xl tracking-tight uppercase drop-shadow-md mx-auto xl:mx-0"
                 >
                   {slides[currentIndex].title}
                 </h2>
               )}
               {slides[currentIndex].description && (
                 <p 
-                  className="text-base sm:text-lg md:text-xl text-slate-100 mb-8 font-medium max-w-xl drop-shadow-md"
+                  className="text-base sm:text-lg md:text-xl text-slate-100 mb-8 font-medium max-w-xl drop-shadow-md mx-auto xl:mx-0"
                 >
                   {slides[currentIndex].description}
                 </p>
@@ -242,7 +242,7 @@ export default function Hero({ currentCity }: { currentCity: any }) {
                     </a>
                   ) : (
                     <button 
-                      onClick={() => openModal(slides[currentIndex].title || slides[currentIndex].buttonText)}
+                      onClick={() => openModal('Запись на сервис')}
                       className="inline-block bg-[#8cc63f] text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-[#7db435] transition-all shadow-lg active:scale-95"
                     >
                       {slides[currentIndex].buttonText || 'Оставить заявку'}

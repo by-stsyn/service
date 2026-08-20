@@ -297,7 +297,7 @@ export default function Services({ currentCity }: ServicesProps) {
                               </span>
                             </div>
                             {item.description && (
-                              <p className="text-sm text-slate-500 mt-2 pr-4 md:pr-12 leading-relaxed">
+                              <p className="text-sm text-slate-500 mt-2 pr-4 md:pr-12 leading-relaxed whitespace-pre-line">
                                 {item.description}
                               </p>
                             )}
@@ -369,7 +369,7 @@ export default function Services({ currentCity }: ServicesProps) {
                               </span>
                             </div>
                             {item.description && (
-                              <span className="text-xs text-slate-500 mt-1 line-clamp-2">
+                              <span className="text-xs text-slate-500 mt-1 line-clamp-3 whitespace-pre-line">
                                 {item.description}
                               </span>
                             )}

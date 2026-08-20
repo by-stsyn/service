@@ -50,7 +50,7 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
           {/* Left side: Form */}
           <div className="md:w-[55%] p-6 sm:p-10 md:p-12 flex flex-col justify-center relative z-10 rounded-l-3xl">
             <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-2">
-              Остались вопросы? <span className="text-xl md:text-2xl text-slate-500 font-normal">Мы с радостью ответим Вам</span>
+              Остались вопросы? <br /><span className="text-xl md:text-2xl text-slate-500 font-normal mt-2 block">Мы с радостью ответим Вам</span>
             </h3>
             <div className="mb-6"></div>
 

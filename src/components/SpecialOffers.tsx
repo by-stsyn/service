@@ -47,7 +47,7 @@ export default function SpecialOffers({ currentCity }: SpecialOffersProps) {
             title: name,
             description: row['описание'] || '',
             newPrice: row['цена'] ? (row['цена'] === '0' ? 'Бесплатно' : `${row['цена']} ₽`) : 'Бесплатно',
-            oldPrice: row['зачеркнутая цена'] ? `${row['зачеркнутая цена']} ₽` : undefined
+            oldPrice: (row['старая цена'] || row['зачеркнутая цена']) ? `${row['старая цена'] || row['зачеркнутая цена']} ₽` : undefined
           });
         });
 
@@ -129,19 +129,36 @@ export default function SpecialOffers({ currentCity }: SpecialOffersProps) {
                 <h3 className="text-slate-900 font-bold text-xl sm:text-2xl mb-3 relative z-10 leading-snug">{offer.title}</h3>
                 
                 {offer.description && (
-                  <p className="text-slate-600 text-sm sm:text-base mb-8 flex-grow leading-relaxed relative z-10">
+                  <p className="text-slate-600 text-sm sm:text-base mb-8 flex-grow leading-relaxed relative z-10 whitespace-pre-line">
                     {offer.description}
                   </p>
                 )}
                 {!offer.description && <div className="flex-grow mb-8" />}
                 
                 <div className="flex flex-col gap-5 mt-auto relative z-10 pt-6 border-t border-slate-100">
-                  <div className="flex flex-col">
-                    {offer.oldPrice && (
-                      <span className="text-slate-400 line-through text-sm font-medium mb-1">{offer.oldPrice}</span>
-                    )}
-                    <span className="text-slate-900 font-extrabold text-3xl tracking-tight">{offer.newPrice}</span>
-                  </div>
+                  {(() => {
+                    let discountPerc = null;
+                    if (offer.oldPrice && offer.newPrice !== 'Бесплатно') {
+                      const oldNum = parseInt(offer.oldPrice.replace(/\D/g, ''));
+                      const newNum = parseInt(offer.newPrice.replace(/\D/g, ''));
+                      if (oldNum && newNum && oldNum > newNum) {
+                        discountPerc = Math.round(((oldNum - newNum) / oldNum) * 100);
+                      }
+                    }
+                    return (
+                      <div className="flex items-center gap-3">
+                        <span className="text-slate-900 font-extrabold text-3xl tracking-tight">{offer.newPrice}</span>
+                        {offer.oldPrice && (
+                          <span className="text-slate-400 line-through text-lg font-medium">{offer.oldPrice}</span>
+                        )}
+                        {discountPerc && (
+                          <span className="bg-[#FF3B30] text-white text-xs font-bold px-2 py-1 rounded-md">
+                            -{discountPerc}%
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
                   
                   <button 
                     onClick={() => openModal(offer.title)}
