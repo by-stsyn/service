@@ -105,12 +105,22 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
 
         {/* Left Side: Form */}
         <div className="w-full md:w-[55%] flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar">
-          <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-8">
-            {getModalTitle()}
+          <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-2">
+            {subject && subject !== 'Запись на сервис' && !subject.startsWith('Запись на услугу:') ? 'Запись на сервис' : getModalTitle()}
           </h3>
+          {subject && subject !== 'Запись на сервис' && !subject.startsWith('Запись на услугу:') ? (
+            <p className="text-lg md:text-xl text-[#8cc63f] font-medium mb-6 leading-tight">
+              По акции: {subject}
+            </p>
+          ) : (
+            <div className="mb-6"></div>
+          )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input type="hidden" name="Source" value="Заявка с сайта (Модальное окно)" />
+            {subject && subject !== 'Запись на сервис' && (
+              <input type="hidden" name="Special_Offer" value={subject} />
+            )}
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
