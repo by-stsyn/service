@@ -1,22 +1,20 @@
 import { motion } from 'motion/react';
 
-const MOCK_BRANDS = [
-  'audi', 'bmw', 'mercedes', 'vw', 'toyota', 'lexus', 
-  'hyundai', 'kia', 'renault', 'nissan', 'ford', 'chevrolet',
-  'skoda', 'mazda', 'honda', 'volvo'
+const MOCK_BRANDS_1 = [
+  'audi', 'bmw', 'mercedes', 'vw', 'toyota', 'lexus', 'hyundai', 'kia'
+];
+
+const MOCK_BRANDS_2 = [
+  'renault', 'nissan', 'ford', 'chevrolet', 'skoda', 'mazda', 'honda', 'volvo'
 ];
 
 const MOCK_BRANDS_3 = [
   'lada', 'evolute', 'geely', 'belgee', 'changan', 'xcite', 'knewstar', 'chery'
 ];
 
-const TOP_BRANDS = [...MOCK_BRANDS.slice(0, 8), ...MOCK_BRANDS.slice(0, 8)];
-const MIDDLE_BRANDS = [...MOCK_BRANDS.slice(8), ...MOCK_BRANDS.slice(8)];
-const BOTTOM_BRANDS = [...MOCK_BRANDS_3, ...MOCK_BRANDS_3];
-
 function BrandLogo({ brand }: { brand: string }) {
   return (
-    <div className="w-24 h-16 sm:w-36 sm:h-20 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center p-3 sm:p-5 hover:shadow-md transition-shadow hover:border-slate-200">
+    <div className="w-24 h-16 sm:w-36 sm:h-20 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-center p-3 sm:p-5 hover:shadow-md transition-all hover:border-slate-200 shrink-0">
       <img 
         src={`/brands/${brand}.png`} 
         alt={`Автосервис для автомобилей марки ${brand}`}
@@ -34,6 +32,48 @@ function BrandLogo({ brand }: { brand: string }) {
   );
 }
 
+function MarqueeRow({ 
+  brands, 
+  direction = 'left', 
+  duration = 60 
+}: { 
+  brands: string[]; 
+  direction?: 'left' | 'right'; 
+  duration?: number;
+}) {
+  // Multiply so one block easily spans across large screens
+  const fullBlock = [...brands, ...brands];
+
+  return (
+    <div className="flex overflow-hidden select-none">
+      <motion.div
+        className="flex shrink-0"
+        animate={{ 
+          x: direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'] 
+        }}
+        transition={{
+          repeat: Infinity,
+          ease: 'linear',
+          duration: duration,
+        }}
+      >
+        {/* Block 1 */}
+        <div className="flex gap-4 sm:gap-6 items-center shrink-0 pr-4 sm:pr-6">
+          {fullBlock.map((brand, idx) => (
+            <BrandLogo key={`block1-${brand}-${idx}`} brand={brand} />
+          ))}
+        </div>
+        {/* Block 2 (Exact identical duplicate for seamless infinite loop) */}
+        <div className="flex gap-4 sm:gap-6 items-center shrink-0 pr-4 sm:pr-6">
+          {fullBlock.map((brand, idx) => (
+            <BrandLogo key={`block2-${brand}-${idx}`} brand={brand} />
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function BrandsMarquee() {
   return (
     <section className="py-12 sm:py-16 bg-white overflow-hidden border-b border-slate-100">
@@ -47,45 +87,14 @@ export default function BrandsMarquee() {
         <div className="absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-        {/* Top Row - Moves Right */}
-        <div className="flex w-[200%] sm:w-full">
-            <motion.div
-              className="flex gap-4 sm:gap-6 items-center min-w-max pr-4 sm:pr-6"
-              animate={{ x: [ "-50%", "0%" ] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
-            >
-                {TOP_BRANDS.map((brand, idx) => (
-                    <BrandLogo key={`top-${brand}-${idx}`} brand={brand} />
-                ))}
-            </motion.div>
-        </div>
+        {/* Top Row - Moves Right smoothly */}
+        <MarqueeRow brands={MOCK_BRANDS_1} direction="right" duration={65} />
 
-        {/* Middle Row - Moves Left */}
-        <div className="flex w-[200%] sm:w-full">
-            <motion.div
-              className="flex gap-4 sm:gap-6 items-center min-w-max pr-4 sm:pr-6"
-              animate={{ x: [ "0%", "-50%" ] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
-            >
-                {MIDDLE_BRANDS.map((brand, idx) => (
-                    <BrandLogo key={`middle-${brand}-${idx}`} brand={brand} />
-                ))}
-            </motion.div>
-        </div>
+        {/* Middle Row - Moves Left smoothly */}
+        <MarqueeRow brands={MOCK_BRANDS_2} direction="left" duration={55} />
 
-        {/* Bottom Row - Moves Right */}
-        <div className="flex w-[200%] sm:w-full">
-            <motion.div
-              className="flex gap-4 sm:gap-6 items-center min-w-max pr-4 sm:pr-6"
-              animate={{ x: [ "-50%", "0%" ] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
-            >
-                {BOTTOM_BRANDS.map((brand, idx) => (
-                    <BrandLogo key={`bottom-${brand}-${idx}`} brand={brand} />
-                ))}
-            </motion.div>
-        </div>
-
+        {/* Bottom Row - Moves Right smoothly */}
+        <MarqueeRow brands={MOCK_BRANDS_3} direction="right" duration={70} />
       </div>
     </section>
   );
