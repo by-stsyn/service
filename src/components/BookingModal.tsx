@@ -69,6 +69,15 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
       formData.append('City', currentCity.name);
     }
 
+    const preferredDate = formData.get('preferred_date');
+    const preferredTime = formData.get('preferred_time');
+    if (preferredDate) {
+      formData.append('Желаемая_дата_записи', String(preferredDate));
+    }
+    if (preferredTime) {
+      formData.append('Желаемое_время_записи', String(preferredTime));
+    }
+
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -187,6 +196,45 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                     className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl outline-none text-slate-600 cursor-default"
                   />
                 )}
+              </div>
+
+              {/* Выбор даты и времени визита */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                    Желаемая дата визита
+                  </label>
+                  <input 
+                    type="date"
+                    name="preferred_date"
+                    min={new Date().toISOString().split('T')[0]}
+                    defaultValue={new Date().toISOString().split('T')[0]}
+                    className="w-full bg-white border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 text-sm font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                    Желаемое время
+                  </label>
+                  <select 
+                    name="preferred_time"
+                    defaultValue="10:00"
+                    className="w-full bg-white border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-10"
+                  >
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                  </select>
+                </div>
               </div>
               
               {status === 'error' && (

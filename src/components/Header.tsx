@@ -6,8 +6,10 @@ import { MapPin, ChevronDown, Check, Menu, X as CloseIcon } from 'lucide-react';
 import { CITIES_DATA } from '../data';
 
 const MAIN_NAV_LINKS = [
+  { label: 'Онлайн-запись', href: '#booking' },
   { label: 'Услуги и цены', href: '#services' },
   { label: 'Акции', href: '#offers' },
+  { label: 'Telegram & MAX', href: '#apps' },
   { label: 'Контакты', href: '#contacts' },
 ];
 
@@ -54,14 +56,16 @@ export default function Header({ currentCity }: { currentCity: any }) {
   return (
     <>
       {/* DESKTOP MAIN BAR (Sticky) */}
-      <header className={`hidden lg:block sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-white border-b border-slate-100 py-5'}`}>
-        <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <a href="#home" onClick={handleScroll} className="flex-shrink-0 group">
+      <header className={`hidden lg:block sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-white border-b border-slate-100 py-3.5'}`}>
+        <div className="max-w-7xl mx-auto px-6 xl:px-8 flex items-center justify-between gap-4">
+          
+          {/* Left: Logo & Scrolled City Selector */}
+          <div className="flex items-center gap-3 shrink-0">
+            <a href="#home" onClick={handleScroll} className="flex-shrink-0 group block">
               <img 
                 src="/logo.png" 
-                alt="Прагматика Сервис" 
-                className={`transition-all duration-300 object-contain origin-left ${isScrolled ? 'h-8' : 'h-10'}`} 
+                alt="Прагматика Автосервис" 
+                className={`transition-all duration-300 object-contain origin-left ${isScrolled ? 'h-8' : 'h-9 xl:h-10'}`} 
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40"><rect width="120" height="40" fill="%23f1f5f9" rx="4"/><text x="60" y="24" font-family="sans-serif" font-size="12" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO PUBLIC</text></svg>';
                 }} 
@@ -69,14 +73,14 @@ export default function Header({ currentCity }: { currentCity: any }) {
             </a>
             
             {/* Mini City Selector (Visible on scroll) */}
-            <div className={`transition-all duration-300 overflow-visible flex items-center ${isScrolled ? 'max-w-[200px] opacity-100 ml-2' : 'max-w-0 opacity-0 ml-0 pointer-events-none'}`}>
+            <div className={`transition-all duration-300 overflow-visible flex items-center ${isScrolled ? 'max-w-[200px] opacity-100 ml-1' : 'max-w-0 opacity-0 ml-0 pointer-events-none'}`}>
               <div className="relative">
                 <button 
                   onClick={() => setIsStickyCityDropdownOpen(!isStickyCityDropdownOpen)} 
-                  className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-bold transition-colors outline-none text-[11px] uppercase tracking-wider bg-slate-100/80 hover:bg-slate-200 px-3 py-1.5 rounded-lg"
+                  className="flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-bold transition-colors outline-none text-[11px] uppercase tracking-wider bg-slate-100/80 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg"
                 >
                   <MapPin className="w-3.5 h-3.5 text-[#8cc63f]" />
-                  <span className="truncate max-w-[140px] whitespace-nowrap">{currentCity.name}</span>
+                  <span className="truncate max-w-[130px] whitespace-nowrap">{currentCity.name}</span>
                   <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isStickyCityDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
                 
@@ -119,29 +123,31 @@ export default function Header({ currentCity }: { currentCity: any }) {
             </div>
           </div>
           
-          <nav className="flex items-center gap-8 lg:gap-10 xl:gap-12 ml-auto lg:mx-auto">
+          {/* Center: Desktop Navigation Links */}
+          <nav className="flex items-center gap-4 xl:gap-7 shrink-0">
             {MAIN_NAV_LINKS.map(link => (
               <a 
                 key={link.label} 
                 href={link.href} 
                 onClick={handleScroll} 
-                className="text-[13px] font-bold text-slate-800 hover:text-[#8cc63f] transition-colors uppercase tracking-widest relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8cc63f] hover:after:w-full after:transition-all after:duration-300"
+                className="text-xs xl:text-[13px] font-bold text-slate-800 hover:text-[#8cc63f] transition-colors uppercase tracking-wider whitespace-nowrap py-1 relative after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8cc63f] hover:after:w-full after:transition-all after:duration-300"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-6 xl:gap-8 ml-auto">
+          {/* Right: Phone & Booking CTA */}
+          <div className="flex items-center gap-4 xl:gap-6 shrink-0">
             <div className="flex flex-col items-end">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Единый телефон</span>
-              <a href="tel:88005511967" className="ct-phone text-lg font-black text-slate-900 hover:text-[#8cc63f] transition-colors leading-none tracking-tight">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Единый телефон</span>
+              <a href="tel:88005511967" className="ct-phone text-base xl:text-lg font-black text-slate-900 hover:text-[#8cc63f] transition-colors leading-none tracking-tight whitespace-nowrap">
                 8 800 551-19-67
               </a>
             </div>
             <button 
               onClick={() => openModal()} 
-              className="bg-[#8cc63f] hover:bg-[#7db435] text-white px-7 py-3 rounded-xl font-bold text-[13px] uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95"
+              className="bg-[#8cc63f] hover:bg-[#7db435] text-white px-5 xl:px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-sm hover:shadow-md active:scale-95 whitespace-nowrap"
             >
               Записаться
             </button>
@@ -152,20 +158,23 @@ export default function Header({ currentCity }: { currentCity: any }) {
       {/* MOBILE HEADER (Sticky) */}
       <header className={`lg:hidden sticky top-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white border-b border-slate-100'}`}>
         <div className={`px-4 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-14' : 'h-16'}`}>
-          <a href="#home" onClick={handleScroll} className="flex-shrink-0 flex items-center">
+          <a href="#home" onClick={handleScroll} className="flex-shrink-0 flex items-center gap-2">
             <img 
               src="/logo.png" 
-              alt="Прагматика Сервис" 
-              className="h-7 object-contain max-w-[140px]" 
+              alt="Прагматика Мультисервис" 
+              className="h-7 object-contain max-w-[120px]" 
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="28"><rect width="100" height="28" fill="%23f1f5f9" rx="4"/><text x="50" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO</text></svg>';
               }} 
             />
+            <span className="text-[9px] font-black uppercase text-[#5a8621] bg-[#8cc63f]/15 border border-[#8cc63f]/30 px-1.5 py-0.5 rounded tracking-tighter">
+              Мультисервис
+            </span>
           </a>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button 
               onClick={() => openModal()} 
-              className="bg-[#8cc63f] hover:bg-[#7db435] text-white px-4 py-2 rounded-lg font-bold text-[11px] uppercase tracking-wider shadow-sm transition-colors"
+              className="bg-[#8cc63f] hover:bg-[#7db435] text-white px-3.5 py-2 rounded-lg font-bold text-[11px] uppercase tracking-wider shadow-sm transition-colors"
             >
               Запись
             </button>
@@ -278,57 +287,63 @@ export default function Header({ currentCity }: { currentCity: any }) {
         )}
       </AnimatePresence>
 
-      {/* PROMINENT CITY SELECTION BANNER (Under Header, scrolls with page) */}
-      <div className="bg-[#8cc63f]/10 border-b border-[#8cc63f]/20 py-2.5 sm:py-3 relative z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-[13px] sm:text-sm">
-          <div className="flex items-center gap-2 text-slate-600 font-medium">
-            <MapPin className="w-4 h-4 text-[#8cc63f] flex-shrink-0" />
-            <span>Автосервисы Прагматика в г.</span>
+      {/* PROMINENT MULTIBRAND & CITY BANNER (Under Header, scrolls with page) */}
+      <div className="bg-[#8cc63f]/10 border-b border-[#8cc63f]/25 py-2.5 sm:py-3 relative z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 text-xs sm:text-sm">
+          <div className="flex items-center gap-2 text-slate-800 font-bold text-center sm:text-left">
+            <span className="w-5 h-5 rounded-full bg-[#8cc63f] text-white flex items-center justify-center text-[10px] font-black shrink-0">✓</span>
+            <span>Мультибрендовый автосервис «Прагматика» — ремонт и ТО любых марок авто</span>
           </div>
-          <div className="relative">
-            <button 
-              onClick={() => setIsBannerCityDropdownOpen(!isBannerCityDropdownOpen)} 
-              className="flex items-center gap-1 font-extrabold text-slate-900 hover:text-[#8cc63f] transition-colors outline-none border-b border-dashed border-slate-900 hover:border-[#8cc63f]"
-            >
-              {currentCity.name}
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isBannerCityDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            <AnimatePresence>
-              {isBannerCityDropdownOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsBannerCityDropdownOpen(false)} />
-                  <motion.div
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 5 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50 p-1.5"
-                  >
-                    {CITIES_DATA.map(city => {
-                      const isSelected = city.slug === currentCity.slug;
-                      return (
-                        <button
-                          key={city.slug}
-                          onClick={() => {
-                            navigate(`/${city.slug}`);
-                            setIsBannerCityDropdownOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold transition-colors rounded-lg outline-none ${
-                            isSelected 
-                              ? 'bg-slate-50 text-[#8cc63f]' 
-                              : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                          }`}
-                        >
-                          {city.name}
-                          {isSelected && <Check className="w-4 h-4 text-[#8cc63f]" />}
-                        </button>
-                      );
-                    })}
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1 text-slate-600 font-medium">
+              <MapPin className="w-3.5 h-3.5 text-[#8cc63f] flex-shrink-0" />
+              <span>Город:</span>
+            </div>
+            <div className="relative">
+              <button 
+                onClick={() => setIsBannerCityDropdownOpen(!isBannerCityDropdownOpen)} 
+                className="flex items-center gap-1 font-extrabold text-slate-900 hover:text-[#8cc63f] transition-colors outline-none border-b border-dashed border-slate-900 hover:border-[#8cc63f]"
+              >
+                {currentCity.name}
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isBannerCityDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              <AnimatePresence>
+                {isBannerCityDropdownOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setIsBannerCityDropdownOpen(false)} />
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full right-0 sm:left-1/2 sm:-translate-x-1/2 mt-3 w-56 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50 p-1.5"
+                    >
+                      {CITIES_DATA.map(city => {
+                        const isSelected = city.slug === currentCity.slug;
+                        return (
+                          <button
+                            key={city.slug}
+                            onClick={() => {
+                              navigate(`/${city.slug}`);
+                              setIsBannerCityDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold transition-colors rounded-lg outline-none ${
+                              isSelected 
+                                ? 'bg-slate-50 text-[#8cc63f]' 
+                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            }`}
+                          >
+                            {city.name}
+                            {isSelected && <Check className="w-4 h-4 text-[#8cc63f]" />}
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

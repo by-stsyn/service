@@ -10,6 +10,8 @@ import { ToastProvider } from './contexts/ToastContext';
 
 const Services = React.lazy(() => import('./components/Services'));
 const SpecialOffers = React.lazy(() => import('./components/SpecialOffers'));
+const OnlineBooking = React.lazy(() => import('./components/OnlineBooking'));
+const AppBotPromo = React.lazy(() => import('./components/AppBotPromo'));
 const BrandsMarquee = React.lazy(() => import('./components/BrandsMarquee'));
 const DiscountBlock = React.lazy(() => import('./components/DiscountBlock'));
 const Reviews = React.lazy(() => import('./components/Reviews'));
@@ -104,8 +106,10 @@ function MainContent() {
         <Suspense fallback={<div className="h-20 w-full flex items-center justify-center">Загрузка...</div>}>
           <Services currentCity={currentCity} />
           <SpecialOffers currentCity={currentCity} />
+          <OnlineBooking currentCity={currentCity} />
           <BrandsMarquee />
           <DiscountBlock currentCity={currentCity} />
+          <AppBotPromo />
           <About />
           <BeforeAfter />
           <Reviews />

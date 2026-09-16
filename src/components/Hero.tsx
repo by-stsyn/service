@@ -214,6 +214,12 @@ export default function Hero({ currentCity }: { currentCity: any }) {
           {/* Content */}
           <div className="absolute inset-0 flex items-center">
             <div className="px-4 sm:px-8 max-w-4xl mx-auto xl:mx-0 xl:ml-16 w-full text-center xl:text-left">
+              {/* Multibrand Indicator Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/30 text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-4 mx-auto xl:mx-0 shadow-md">
+                <span className="w-2 h-2 rounded-full bg-[#8cc63f] animate-pulse shrink-0" />
+                <span>Мультибрендовый сервис • Обслуживаем все марки авто</span>
+              </div>
+
               {slides[currentIndex].title && (
                 <h2 
                   className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-none max-w-3xl tracking-tight uppercase drop-shadow-md mx-auto xl:mx-0"
