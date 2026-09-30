@@ -1,48 +1,47 @@
 import React from 'react';
 import { 
-  Smartphone, 
-  BellRing, 
   CalendarClock, 
-  Coins, 
-  FileText, 
-  MessageSquare, 
-  CheckCircle, 
+  CreditCard, 
+  Tag, 
+  Car,
+  ShieldCheck,
+  Newspaper,
   ArrowUpRight, 
   Sparkles,
   Shield,
-  Zap
+  Check
 } from 'lucide-react';
 
 const ADVANTAGES = [
   {
     icon: CalendarClock,
-    title: 'Запись за 30 секунд',
-    desc: 'Записывайтесь на ТО или ремонт в любое время 24/7 без звонков оператору и ожидания на линии.'
+    title: 'Запись на точное время',
+    desc: 'Выбирайте филиал, мастера и удобный часовой слот прямо в интерактивном расписании без звонков и ожидания.'
   },
   {
-    icon: BellRing,
-    title: 'Статус ремонта онлайн',
-    desc: 'Мгновенные уведомления о статусе работ: от заезда в бокс до готовности автомобиля к выдаче.'
+    icon: Car,
+    title: 'Покупка новых авто',
+    desc: 'Каталог новых автомобилей в наличии от официального дилера: комплектации, актуальные цены и бронирование онлайн.'
   },
   {
-    icon: Coins,
-    title: 'Бонусы и эксклюзивные скидки',
-    desc: 'Кешбэк баллами за каждый визит и закрытые спецпредложения, доступные только пользователям бота.'
+    icon: ShieldCheck,
+    title: 'Автомобили с пробегом',
+    desc: 'Проверенные авто с пробегом с полной диагностической картой, юридической чистотой и бронью в один клик.'
   },
   {
-    icon: FileText,
-    title: 'Электронная сервисная книжка',
-    desc: 'Вся история обслуживания, замененные детали, заказ-наряды и рекомендации мастера всегда в вашем телефоне.'
+    icon: CreditCard,
+    title: 'Виртуальная бонусная карта',
+    desc: 'Оформление бонусной карты в 1 клик прямо в Mini App. Копите кешбэк баллами с каждого визита и оплачивайте ими до 30% услуг.'
   },
   {
-    icon: MessageSquare,
-    title: 'Прямой чат с мастером',
-    desc: 'Отправляйте фото или видео симптомов неисправности, согласуйте доп. работы в один клик без звонков.'
+    icon: Tag,
+    title: 'Акции и спецпредложения',
+    desc: 'Мгновенная проверка действующих акций, сезонных скидок на ТО, шиномонтаж и покупку авто, а также закрытых спецпредложений.'
   },
   {
-    icon: Zap,
-    title: 'Умные напоминания',
-    desc: 'Бот вовремя напомнит о плановом ТО, замене тормозных колодок и сезонной переобувке шин.'
+    icon: Newspaper,
+    title: 'Новости и события',
+    desc: 'Свежие новости автохолдинга, полезные статьи для автовладельцев, анонсы сервисных кампаний и новинок автопрома.'
   }
 ];
 
@@ -60,47 +59,69 @@ export default function AppBotPromo() {
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8cc63f]/20 border border-[#8cc63f]/40 text-[#8cc63f] text-xs sm:text-sm font-bold uppercase tracking-wider mb-4">
             <Sparkles className="w-4 h-4" />
-            <span>Сервис в вашем смартфоне</span>
+            <span>Mini Apps нового поколения</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-5">
-            Управляйте обслуживанием через <br className="hidden sm:inline" />
-            <span className="text-[#8cc63f]">Telegram-бота</span> и <span className="text-sky-400">приложение MAX</span>
+            Управляйте сервисом и покупкой авто в <br className="hidden sm:inline" />
+            <span className="text-[#8cc63f]">Mini Apps</span> в Telegram и MAX
           </h2>
           <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-            Переходите в наши официальные каналы и получайте максимум удобства: запись без ожидания, статус ремонта в реальном времени и персональные скидки.
+            Полноценные удобные приложения прямо внутри Telegram и MAX: запись на сервис на точное время, покупка новых авто и автомобилей с пробегом, свежие новости, акции и выпуск бонусной карты.
           </p>
         </div>
 
-        {/* Channels Cards (Telegram & MAX) */}
+        {/* Channels Cards (Telegram & MAX Mini Apps) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-16">
           
-          {/* Telegram Card */}
+          {/* Telegram Mini App Card */}
           <div className="bg-slate-800/80 border border-slate-700/80 hover:border-[#8cc63f]/60 rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-[#8cc63f]/10 relative group">
-            <div className="flex items-start justify-between gap-4 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-[#229ED9]/20 border border-[#229ED9]/40 p-2.5 flex items-center justify-center flex-shrink-0">
-                  <img 
-                    src="/tg.png" 
-                    alt="Telegram Бот Прагматика" 
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="%23229ED9"/><path d="M9 19l19-8-6 17-5-5-4 4v-5l-4-3z" fill="white"/></svg>';
-                    }}
-                  />
+            <div>
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-[#229ED9]/20 border border-[#229ED9]/40 p-2.5 flex items-center justify-center flex-shrink-0">
+                    <img 
+                      src="/tg.png" 
+                      alt="Telegram Mini App Прагматика" 
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="%23229ED9"/><path d="M9 19l19-8-6 17-5-5-4 4v-5l-4-3z" fill="white"/></svg>';
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-sky-400">Telegram Mini App</span>
+                    <h3 className="text-2xl font-bold text-white mt-0.5">@Pragmatikabot</h3>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-sky-400">Telegram Bot</span>
-                  <h3 className="text-2xl font-bold text-white mt-0.5">@Pragmatikabot</h3>
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#8cc63f] bg-[#8cc63f]/15 border border-[#8cc63f]/30 px-3 py-1 rounded-full uppercase">
+                  Mini App
+                </span>
+              </div>
+
+              <p className="text-sm sm:text-base text-slate-300 mb-5 leading-relaxed">
+                Полнофункциональное мини-приложение прямо внутри Telegram. Без лишних скачиваний и регистраций — открывается моментально в один клик.
+              </p>
+
+              {/* Feature Highlights Pills */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6 text-xs text-slate-200">
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-[#8cc63f] shrink-0" />
+                  <span>Запись на точное время</span>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-[#8cc63f] shrink-0" />
+                  <span>Новые авто и с пробегом</span>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-[#8cc63f] shrink-0" />
+                  <span>Оформление бонусной карты</span>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-[#8cc63f] shrink-0" />
+                  <span>Новости и актуальные акции</span>
                 </div>
               </div>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-[#8cc63f] bg-[#8cc63f]/15 border border-[#8cc63f]/30 px-3 py-1 rounded-full uppercase">
-                Все марки авто
-              </span>
             </div>
-
-            <p className="text-sm sm:text-base text-slate-300 mb-6 leading-relaxed">
-              Быстрый умный бот в привычном мессенджере. Работает прямо в Telegram — ничего дополнительно устанавливать не требуется.
-            </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-slate-700/60">
               <a 
@@ -109,42 +130,64 @@ export default function AppBotPromo() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 bg-[#229ED9] hover:bg-[#1e8bc0] text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md active:scale-95 text-sm sm:text-base"
               >
-                <span>Запустить бота в Telegram</span>
+                <span>Открыть Mini App в Telegram</span>
                 <ArrowUpRight className="w-4 h-4" />
               </a>
               <span className="text-xs text-slate-400 text-center sm:text-left">
-                ⚡ Мгновенный запуск за 1 клик
+                ⚡ Мгновенный запуск за 1 секунду
               </span>
             </div>
           </div>
 
-          {/* MAX App Card */}
+          {/* MAX Mini App Card */}
           <div className="bg-slate-800/80 border border-slate-700/80 hover:border-sky-400/60 rounded-3xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-sky-500/10 relative group">
-            <div className="flex items-start justify-between gap-4 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 p-2.5 flex items-center justify-center flex-shrink-0">
-                  <img 
-                    src="/max.png" 
-                    alt="Приложение MAX" 
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" rx="10" fill="%230ea5e9"/><text x="20" y="26" font-family="sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">MAX</text></svg>';
-                    }}
-                  />
+            <div>
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 p-2.5 flex items-center justify-center flex-shrink-0">
+                    <img 
+                      src="/max.png" 
+                      alt="Mini App MAX" 
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" rx="10" fill="%230ea5e9"/><text x="20" y="26" font-family="sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">MAX</text></svg>';
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#8cc63f]">MAX Mini App</span>
+                    <h3 className="text-2xl font-bold text-white mt-0.5">Приложение MAX</h3>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#8cc63f]">Мобильный сервис</span>
-                  <h3 className="text-2xl font-bold text-white mt-0.5">Приложение MAX</h3>
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-400 bg-sky-500/15 border border-sky-500/30 px-3 py-1 rounded-full uppercase">
+                  Mini App
+                </span>
+              </div>
+
+              <p className="text-sm sm:text-base text-slate-300 mb-5 leading-relaxed">
+                Интерактивное Mini App в приложении MAX для автовладельцев: быстрый выбор точного времени записи, покупка новых авто и с пробегом, бонусная карта, новости и акции.
+              </p>
+
+              {/* Feature Highlights Pills */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-6 text-xs text-slate-200">
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-sky-400 shrink-0" />
+                  <span>Запись на точное время</span>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-sky-400 shrink-0" />
+                  <span>Новые авто и с пробегом</span>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-sky-400 shrink-0" />
+                  <span>Бонусная карта и кешбэк</span>
+                </div>
+                <div className="flex items-center gap-2 bg-slate-900/50 border border-slate-700/60 rounded-xl px-3 py-2">
+                  <Check className="w-4 h-4 text-sky-400 shrink-0" />
+                  <span>Свежие акции и новости</span>
                 </div>
               </div>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-sky-400 bg-sky-500/15 border border-sky-500/30 px-3 py-1 rounded-full uppercase">
-                Личный кабинет
-              </span>
             </div>
-
-            <p className="text-sm sm:text-base text-slate-300 mb-6 leading-relaxed">
-              Фирменная экосистема MAX для автовладельцев: расширенная сервисная книжка, электронные чеки, акции и удобный интерфейс.
-            </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-slate-700/60">
               <a 
@@ -153,7 +196,7 @@ export default function AppBotPromo() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 bg-[#8cc63f] hover:bg-[#7db435] text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md active:scale-95 text-sm sm:text-base"
               >
-                <span>Перейти в приложение MAX</span>
+                <span>Открыть Mini App в MAX</span>
                 <ArrowUpRight className="w-4 h-4" />
               </a>
               <span className="text-xs text-slate-400 text-center sm:text-left">
@@ -168,10 +211,10 @@ export default function AppBotPromo() {
         <div className="bg-slate-800/40 border border-slate-800 rounded-3xl p-6 sm:p-10 lg:p-12">
           <div className="text-center mb-10">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-              Что дает вам подключение?
+              Что дают вам наши Mini Apps?
             </h3>
             <p className="text-sm sm:text-base text-slate-400">
-              6 ключевых преимуществ для каждого автовладельца
+              Все сервисы и возможности автохолдинга прямо в вашем смартфоне
             </p>
           </div>
 
@@ -200,7 +243,7 @@ export default function AppBotPromo() {
           <div className="mt-10 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div className="flex items-center gap-3 text-slate-300 text-xs sm:text-sm">
               <Shield className="w-5 h-5 text-[#8cc63f] shrink-0" />
-              <span>Никакого спама — только важные уведомления о статусе вашего автомобиля.</span>
+              <span>Запись на сервис, покупка авто, бонусная карта, новости и акции — в один клик без лишних звонков.</span>
             </div>
             <div className="flex items-center gap-3">
               <a 
@@ -209,7 +252,7 @@ export default function AppBotPromo() {
                 rel="noopener noreferrer"
                 className="text-xs sm:text-sm font-bold text-[#8cc63f] hover:underline flex items-center gap-1"
               >
-                Подключить Telegram →
+                Telegram Mini App →
               </a>
               <span className="text-slate-600">•</span>
               <a 
@@ -218,7 +261,7 @@ export default function AppBotPromo() {
                 rel="noopener noreferrer"
                 className="text-xs sm:text-sm font-bold text-sky-400 hover:underline flex items-center gap-1"
               >
-                Подключить MAX →
+                MAX Mini App →
               </a>
             </div>
           </div>
