@@ -92,9 +92,6 @@ export default function Footer({ currentCity }: { currentCity?: any }) {
                  <br />
                  Ежедневно с 09:00 до 21:00
                </p>
-               <p>
-                 <a href="mailto:info@pragmatika-service.ru" className="hover:text-[#8cc63f] transition-colors">info@pragmatika-service.ru</a>
-               </p>
                
                <div className="flex items-center gap-4 mt-2">
                  <a href="https://t.me/Pragmatikabot" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">

@@ -305,24 +305,47 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
 
                 {/* 3. Выбор филиала */}
                 <div>
-                  <label className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wider mb-2">
+                  <label className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wider mb-3">
                     <MapPin className="w-4 h-4 text-[#8cc63f]" />
-                    <span>3. Дилерский центр ({currentCity.name})</span>
+                    <span>3. Выберите дилерский центр ({currentCity.name})</span>
                   </label>
                   {currentAddresses.length > 1 ? (
-                    <select
-                      value={selectedDealer}
-                      onChange={(e) => setSelectedDealer(e.target.value)}
-                      className="w-full bg-white border border-slate-200 p-3.5 rounded-xl font-medium text-slate-800 outline-none focus:ring-2 focus:ring-[#8cc63f] text-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
-                    >
-                      {currentAddresses.map((addr, idx) => (
-                        <option key={idx} value={addr}>{addr}</option>
-                      ))}
-                    </select>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {currentAddresses.map((addr) => {
+                        const isSelected = selectedDealer === addr;
+                        return (
+                          <button
+                            key={addr}
+                            type="button"
+                            onClick={() => setSelectedDealer(addr)}
+                            className={`py-3 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-between gap-2 border cursor-pointer text-left ${
+                              isSelected
+                                ? 'bg-[#8cc63f] text-white border-[#8cc63f] shadow-sm'
+                                : 'bg-white hover:bg-slate-100/70 text-slate-700 border-slate-200/80 hover:border-slate-300'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <MapPin className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-[#8cc63f]'}`} />
+                              <span className="truncate">{addr}</span>
+                            </div>
+                            <span className={`w-3.5 h-3.5 rounded-full border shrink-0 flex items-center justify-center ${
+                              isSelected ? 'border-white bg-white' : 'border-slate-300'
+                            }`}>
+                              {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#8cc63f]" />}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   ) : currentAddresses.length === 1 ? (
-                    <div className="bg-white border border-slate-200 p-3.5 rounded-xl text-sm font-semibold text-slate-800 flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-[#8cc63f] shrink-0" />
-                      <span>{currentAddresses[0]}</span>
+                    <div className="bg-white border border-[#8cc63f]/30 bg-[#8cc63f]/5 p-3.5 rounded-xl text-sm font-bold text-slate-800 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-[#8cc63f] shrink-0" />
+                        <span>{currentAddresses[0]}</span>
+                      </div>
+                      <span className="text-[11px] font-bold text-[#6a9e27] bg-white px-2.5 py-0.5 rounded-md border border-[#8cc63f]/30">
+                        Выбран
+                      </span>
                     </div>
                   ) : (
                     <div className="bg-white border border-slate-200 p-3.5 rounded-xl text-sm font-medium text-slate-600">
@@ -411,20 +434,26 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                     />
                   </div>
 
-                  {/* Карточка-саммари выбранного времени */}
-                  <div className="bg-[#8cc63f]/10 border border-[#8cc63f]/25 rounded-xl p-3.5 flex items-center justify-between text-xs sm:text-sm">
-                    <div className="flex items-center gap-2 text-slate-800">
-                      <CalendarIcon className="w-4 h-4 text-[#78aa2e] shrink-0" />
-                      <div>
-                        <div className="font-bold">{formattedSelectedDate}</div>
-                        <div className="text-slate-500 text-[11px]">в {selectedTime}</div>
+                  {/* Карточка-саммари выбранного времени и ДЦ */}
+                  <div className="bg-[#8cc63f]/10 border border-[#8cc63f]/25 rounded-xl p-3.5 flex flex-col gap-2 text-xs sm:text-sm">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-slate-800">
+                        <CalendarIcon className="w-4 h-4 text-[#78aa2e] shrink-0" />
+                        <div>
+                          <span className="font-bold">{formattedSelectedDate}</span>
+                          <span className="text-slate-500 text-[11px] ml-1.5">в {selectedTime}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-right">
                       <span className="inline-block px-2.5 py-1 bg-white rounded-md text-[11px] font-bold text-[#6a9e27] border border-[#8cc63f]/30">
                         Бронь без очереди
                       </span>
                     </div>
+                    {selectedDealer && (
+                      <div className="flex items-center gap-1.5 text-[11px] text-slate-700 font-medium border-t border-[#8cc63f]/20 pt-2">
+                        <MapPin className="w-3.5 h-3.5 text-[#78aa2e] shrink-0" />
+                        <span className="truncate">{selectedDealer}</span>
+                      </div>
+                    )}
                   </div>
 
                   {status === 'error' && (
