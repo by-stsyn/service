@@ -54,7 +54,7 @@ export default function Reviews() {
   const reviewSchema = {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
-    "name": "Мультисервис Прагматика",
+    "name": "Прагматика Эксперт Сервис",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",

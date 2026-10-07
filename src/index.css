@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 @theme {
+  --color-pragmatika-green: #8cc63f;
+  --color-pragmatika-dark: #425766;
+  --color-pragmatika-light: #87a5b6;
+  --color-pragmatika-black: #000000;
   --font-sans: 'PT Sans', system-ui, sans-serif;
   --font-heading: 'PT Sans', system-ui, sans-serif;
 }

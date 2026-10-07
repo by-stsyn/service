@@ -22,20 +22,21 @@ const BeforeAfter = React.lazy(() => import('./components/BeforeAfter'));
 const Contacts = React.lazy(() => import('./components/Contacts'));
 const Footer = React.lazy(() => import('./components/Footer'));
 const BookingModal = React.lazy(() => import('./components/BookingModal'));
+const MobileBottomTabBar = React.lazy(() => import('./components/MobileBottomTabBar'));
 
 function MainContent() {
   const { citySlug } = useParams();
   const currentCity = CITIES_DATA.find(c => c.slug === citySlug) || CITIES_DATA[0];
   
   const cityName = currentCity.name;
-  const pageTitle = `Автосервис Прагматика в г. ${cityName} | Ремонт и обслуживание автомобилей`;
-  const pageDescription = `Мультисервис Прагматика. Профессиональный ремонт, ТО и диагностика автомобилей любых марок в г. ${cityName}. Доступные цены, гарантия на работы.`;
+  const pageTitle = `Автосервис «Прагматика Эксперт Сервис» в г. ${cityName} | Ремонт и обслуживание автомобилей`;
+  const pageDescription = `Мультисервис «Прагматика Эксперт Сервис». Профессиональный ремонт, ТО и диагностика автомобилей любых марок в г. ${cityName}. Доступные цены, гарантия дилера на работы и запчасти.`;
   const pageUrl = `https://pragmatika-service.ru/${currentCity.slug}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
-    "name": `Прагматика Мультисервис ${cityName}`,
+    "name": `Прагматика Эксперт Сервис ${cityName}`,
     "image": "https://pragmatika-service.ru/logo.png",
     "url": pageUrl,
     "telephone": ADDRESSES.find(a => a.city === cityName)?.phone || "8 800 551-19-67",
@@ -100,7 +101,7 @@ function MainContent() {
         </script>
       </Helmet>
       <Header currentCity={currentCity} />
-      <main className="flex-grow flex flex-col">
+      <main className="flex-grow flex flex-col pb-16 lg:pb-0">
         <Hero currentCity={currentCity} />
         <ServiceCategories />
         <Suspense fallback={<div className="h-20 w-full flex items-center justify-center">Загрузка...</div>}>
@@ -121,6 +122,7 @@ function MainContent() {
       <Suspense fallback={null}>
         <Footer currentCity={currentCity} />
         <BookingModal currentCity={currentCity} />
+        <MobileBottomTabBar currentCity={currentCity} />
       </Suspense>
       </ModalProvider>
     </ToastProvider>

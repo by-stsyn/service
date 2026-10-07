@@ -98,31 +98,35 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-pragmatika-dark/60 backdrop-blur-xs transition-opacity"
       onClick={closeModal}
     >
       <div 
-        className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden relative flex flex-col md:flex-row max-h-[95vh] sm:max-h-[90vh]"
+        className="bg-white w-full max-w-5xl rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden relative flex flex-col md:flex-row max-h-[92vh] sm:max-h-[90vh] animate-slide-up"
         onClick={e => e.stopPropagation()}
       >
+        {/* Mobile Pull Bar */}
+        <div className="w-12 h-1.5 rounded-full bg-slate-200 mx-auto mt-3 sm:hidden" />
+
         <button 
           onClick={closeModal}
-          className="absolute top-4 right-4 z-20 p-2 text-slate-400 hover:text-slate-900 bg-white hover:bg-slate-100 rounded-full transition-colors shadow-sm md:shadow-none"
+          className="absolute top-4 right-4 z-20 p-2 text-pragmatika-light hover:text-pragmatika-dark bg-slate-50 hover:bg-slate-100 rounded-full transition-colors shadow-sm"
+          aria-label="Закрыть"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
 
         {/* Left Side: Form */}
-        <div className="w-full md:w-[55%] flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar">
-          <h3 className="text-3xl md:text-4xl font-semibold text-slate-800 tracking-tight mb-2">
+        <div className="w-full md:w-[55%] flex flex-col p-6 sm:p-8 md:p-12 overflow-y-auto custom-scrollbar">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-pragmatika-dark tracking-tight mb-2">
             {subject && subject !== 'Запись на сервис' && !subject.startsWith('Запись на услугу:') ? 'Запись на сервис' : getModalTitle()}
           </h3>
           {subject && subject !== 'Запись на сервис' && !subject.startsWith('Запись на услугу:') ? (
-            <p className="text-lg md:text-xl text-[#8cc63f] font-medium mb-6 leading-tight">
+            <p className="text-base sm:text-lg text-pragmatika-green font-semibold mb-6 leading-tight">
               По акции: {subject}
             </p>
           ) : (
-            <div className="mb-6"></div>
+            <div className="mb-4"></div>
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -131,14 +135,14 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
               <input type="hidden" name="Special_Offer" value={subject} />
             )}
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <input 
                     name="name"
                     required
                     type="text" 
                     placeholder="Введите ФИО*" 
-                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 placeholder:text-slate-400"
+                    className="w-full bg-slate-50/50 border border-pragmatika-light/40 p-3.5 rounded-xl focus:ring-2 focus:ring-pragmatika-green focus:border-transparent outline-none transition-all text-pragmatika-dark placeholder:text-pragmatika-light text-sm font-medium"
                   />
                 </div>
                 
@@ -147,7 +151,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                     name="phone"
                     required
                     placeholder="+7 (___) ___-__-__" 
-                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 placeholder:text-slate-400"
+                    className="w-full bg-slate-50/50 border border-pragmatika-light/40 p-3.5 rounded-xl focus:ring-2 focus:ring-pragmatika-green focus:border-transparent outline-none transition-all text-pragmatika-dark placeholder:text-pragmatika-light text-sm font-medium"
                   />
                 </div>
               </div>
@@ -158,7 +162,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                   required
                   value={selectedService}
                   onChange={(e) => setSelectedService(e.target.value)}
-                  className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                  className="w-full bg-slate-50/50 border border-pragmatika-light/40 p-3.5 rounded-xl focus:ring-2 focus:ring-pragmatika-green focus:border-transparent outline-none transition-all text-pragmatika-dark text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2387a5b6%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
                 >
                   <option value="" disabled>Укажите услугу*</option>
                   <option value="Техническое обслуживание и ремонт">Техническое обслуживание и ремонт</option>
@@ -177,7 +181,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                     name="dealer_center"
                     required
                     defaultValue=""
-                    className="w-full bg-white border border-slate-200 p-4 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
+                    className="w-full bg-slate-50/50 border border-pragmatika-light/40 p-3.5 rounded-xl focus:ring-2 focus:ring-pragmatika-green focus:border-transparent outline-none transition-all text-pragmatika-dark text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2387a5b6%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-12"
                   >
                     <option value="" disabled>Укажите дилерский центр*</option>
                     {currentAddresses.map((addr: string, idx: number) => (
@@ -193,15 +197,15 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                     name="dealer_center"
                     value={currentAddresses[0]}
                     readOnly
-                    className="w-full bg-slate-50 border border-slate-200 p-4 rounded-xl outline-none text-slate-600 cursor-default"
+                    className="w-full bg-slate-50 border border-pragmatika-light/40 p-3.5 rounded-xl outline-none text-pragmatika-dark text-sm cursor-default"
                   />
                 )}
               </div>
 
               {/* Выбор даты и времени визита */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[11px] font-bold text-pragmatika-light uppercase tracking-wider mb-1">
                     Желаемая дата визита
                   </label>
                   <input 
@@ -209,17 +213,17 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                     name="preferred_date"
                     min={new Date().toISOString().split('T')[0]}
                     defaultValue={new Date().toISOString().split('T')[0]}
-                    className="w-full bg-white border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 text-sm font-medium"
+                    className="w-full bg-slate-50/50 border border-pragmatika-light/40 p-3.5 rounded-xl focus:ring-2 focus:ring-pragmatika-green focus:border-transparent outline-none transition-all text-pragmatika-dark text-sm font-medium"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  <label className="block text-[11px] font-bold text-pragmatika-light uppercase tracking-wider mb-1">
                     Желаемое время
                   </label>
                   <select 
                     name="preferred_time"
                     defaultValue="10:00"
-                    className="w-full bg-white border border-slate-200 p-3.5 rounded-xl focus:ring-2 focus:ring-[#8cc63f] focus:border-transparent outline-none transition-all text-slate-900 text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-10"
+                    className="w-full bg-slate-50/50 border border-pragmatika-light/40 p-3.5 rounded-xl focus:ring-2 focus:ring-pragmatika-green focus:border-transparent outline-none transition-all text-pragmatika-dark text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20stroke%3D%22%2387a5b6%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%209l6%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-10"
                   >
                     <option value="09:00">09:00</option>
                     <option value="10:00">10:00</option>
@@ -238,7 +242,7 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
               </div>
               
               {status === 'error' && (
-                <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm border border-red-100 font-medium text-center">
+                <div className="p-3 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100 font-medium text-center">
                   Произошла ошибка при отправке заявки.
                 </div>
               )}
@@ -247,38 +251,38 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
                 <button 
                   type="submit"
                   disabled={status === 'submitting'}
-                  className="w-full flex items-center justify-center gap-3 bg-[#8cc63f] hover:bg-[#7db435] text-white font-medium text-lg px-6 py-4 rounded-xl shadow-sm transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
+                  className="w-full flex items-center justify-center gap-3 bg-pragmatika-green hover:brightness-105 text-white font-bold text-base sm:text-lg px-6 py-4 rounded-xl shadow-sm transition-all active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
                 >
                   {status === 'submitting' ? (
                     <>
-                      <Loader2 className="w-6 h-6 animate-spin" />
+                      <Loader2 className="w-5 h-5 animate-spin" />
                       Отправка...
                     </>
                   ) : (
-                    'Отправить'
+                    'Записаться'
                   )}
                 </button>
               </div>
 
-              <div className="mt-4 flex items-start gap-3">
-                <div className="relative flex items-start pt-1">
+              <div className="mt-3 flex items-start gap-3">
+                <div className="relative flex items-start pt-0.5">
                   <input
                     type="checkbox"
                     id="consent-modal"
                     required
                     defaultChecked
-                    className="w-5 h-5 border-slate-300 rounded text-[#8cc63f] focus:ring-[#8cc63f] bg-slate-50 cursor-pointer"
+                    className="w-4 h-4 border-pragmatika-light rounded text-pragmatika-green focus:ring-pragmatika-green bg-slate-50 cursor-pointer"
                   />
                 </div>
-                <label htmlFor="consent-modal" className="text-xs text-slate-500 leading-tight cursor-pointer">
-                  Я даю согласие группе компаний «Прагматика» на <a href="/service.pdf" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[#8cc63f] hover:underline">обработку моих персональных данных</a>.
+                <label htmlFor="consent-modal" className="text-xs text-pragmatika-light leading-tight cursor-pointer">
+                  Я даю согласие группе компаний «Прагматика» на <a href="/service.pdf" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-pragmatika-dark underline font-semibold">обработку моих персональных данных</a>.
                 </label>
               </div>
             </form>
         </div>
 
         {/* Right Side: Decorative Image */}
-        <div className="hidden md:flex md:w-[45%] relative bg-white items-center justify-center p-8 lg:p-12 overflow-hidden">
+        <div className="hidden md:flex md:w-[45%] relative bg-slate-50/50 items-center justify-center p-8 lg:p-12 overflow-hidden">
           <img 
             src="/form-pic.png" 
             alt="Запись на сервис" 

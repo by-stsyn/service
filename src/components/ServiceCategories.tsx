@@ -49,7 +49,7 @@ export default function ServiceCategories() {
     "serviceType": "Автосервис",
     "provider": {
       "@type": "AutoRepair",
-      "name": "Мультисервис Прагматика"
+      "name": "Прагматика Эксперт Сервис"
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",

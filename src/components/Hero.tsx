@@ -184,7 +184,7 @@ export default function Hero({ currentCity }: { currentCity: any }) {
 
   return (
     <section id="home" className="relative w-full h-[500px] sm:h-[550px] overflow-hidden flex-shrink-0 bg-slate-900 group">
-      <h1 className="sr-only">Автосервис Прагматика Мультисервис в г. {currentCity.name}. Ремонт, ТО, диагностика автомобилей.</h1>
+      <h1 className="sr-only">Автосервис «Прагматика Эксперт Сервис» в г. {currentCity.name}. Ремонт, ТО, диагностика автомобилей.</h1>
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentIndex}
