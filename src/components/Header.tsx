@@ -292,7 +292,7 @@ export default function Header({ currentCity }: { currentCity: any }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 text-xs sm:text-sm">
           <div className="flex items-center gap-2 text-slate-800 font-bold text-center sm:text-left">
             <span className="w-5 h-5 rounded-full bg-[#8cc63f] text-white flex items-center justify-center text-[10px] font-black shrink-0">✓</span>
-            <span>Мультибрендовый автосервис «Прагматика» — ремонт и ТО любых марок авто</span>
+            <span>Мультибрендовый автосервис «Прагматика Эксперт Сервис» — ремонт и ТО любых марок авто</span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <div className="flex items-center gap-1 text-slate-600 font-medium">

@@ -130,7 +130,7 @@ export default function MobileBottomTabBar({ currentCity }: { currentCity?: any 
         {/* Tab 5: Phone Call */}
         <a
           href="tel:88005511967"
-          className="flex-1 flex flex-col items-center justify-center py-1 focus:outline-none"
+          className="ct-phone flex-1 flex flex-col items-center justify-center py-1 focus:outline-none"
         >
           <Phone className="w-5 h-5 text-pragmatika-light stroke-[1.8] hover:text-pragmatika-green transition-colors" />
           <span className="text-[10px] mt-1 font-medium text-pragmatika-light leading-none">

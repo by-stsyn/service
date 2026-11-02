@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 import { Helmet } from 'react-helmet-async';
 import Header from './components/Header';
@@ -7,6 +7,7 @@ import ServiceCategories from './components/ServiceCategories';
 import { CITIES_DATA, ADDRESSES } from './data';
 import { ModalProvider } from './contexts/ModalContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { YANDEX_METRIKA_ID } from './utils/analytics';
 
 const Services = React.lazy(() => import('./components/Services'));
 const SpecialOffers = React.lazy(() => import('./components/SpecialOffers'));
@@ -26,8 +27,24 @@ const MobileBottomTabBar = React.lazy(() => import('./components/MobileBottomTab
 
 function MainContent() {
   const { citySlug } = useParams();
-  const currentCity = CITIES_DATA.find(c => c.slug === citySlug) || CITIES_DATA[0];
-  
+  const matchedCity = CITIES_DATA.find(c => c.slug === citySlug);
+
+  useEffect(() => {
+    if (!matchedCity) return;
+    try {
+      if (typeof window !== 'undefined' && typeof window.ym === 'function') {
+        window.ym(YANDEX_METRIKA_ID, 'hit', window.location.href);
+      }
+    } catch {
+      // Ignore if Metrika is blocked
+    }
+  }, [matchedCity?.slug]);
+
+  if (!matchedCity) {
+    return <Navigate to="/spb" replace />;
+  }
+
+  const currentCity = matchedCity;
   const cityName = currentCity.name;
   const pageTitle = `Автосервис «Прагматика Эксперт Сервис» в г. ${cityName} | Ремонт и обслуживание автомобилей`;
   const pageDescription = `Мультисервис «Прагматика Эксперт Сервис». Профессиональный ремонт, ТО и диагностика автомобилей любых марок в г. ${cityName}. Доступные цены, гарантия дилера на работы и запчасти.`;
@@ -89,41 +106,41 @@ function MainContent() {
       <ModalProvider>
         <Helmet>
           <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={pageUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:image" content="https://pragmatika-service.ru/logo.png" />
-        <script type="application/ld+json">
-          {`[${JSON.stringify(jsonLd)},${JSON.stringify(breadcrumbSchema)}]`}
-        </script>
-      </Helmet>
-      <Header currentCity={currentCity} />
-      <main className="flex-grow flex flex-col pb-16 lg:pb-0">
-        <Hero currentCity={currentCity} />
-        <ServiceCategories />
-        <Suspense fallback={<div className="h-20 w-full flex items-center justify-center">Загрузка...</div>}>
-          <Services currentCity={currentCity} />
-          <SpecialOffers currentCity={currentCity} />
-          <OnlineBooking currentCity={currentCity} />
-          <BrandsMarquee />
-          <DiscountBlock currentCity={currentCity} />
-          <AppBotPromo />
-          <About />
-          <BeforeAfter />
-          <Reviews />
-          <FAQ />
-          <QuestionForm currentCity={currentCity} />
-          <Contacts currentCity={currentCity} />
+          <meta name="description" content={pageDescription} />
+          <link rel="canonical" href={pageUrl} />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={pageDescription} />
+          <meta property="og:url" content={pageUrl} />
+          <meta property="og:image" content="https://pragmatika-service.ru/logo.png" />
+          <script type="application/ld+json">
+            {`[${JSON.stringify(jsonLd)},${JSON.stringify(breadcrumbSchema)}]`}
+          </script>
+        </Helmet>
+        <Header currentCity={currentCity} />
+        <main className="flex-grow flex flex-col pb-16 lg:pb-0">
+          <Hero currentCity={currentCity} />
+          <ServiceCategories />
+          <Suspense fallback={<div className="h-20 w-full flex items-center justify-center">Загрузка...</div>}>
+            <Services currentCity={currentCity} />
+            <SpecialOffers currentCity={currentCity} />
+            <OnlineBooking currentCity={currentCity} />
+            <BrandsMarquee />
+            <DiscountBlock currentCity={currentCity} />
+            <AppBotPromo />
+            <About />
+            <BeforeAfter />
+            <Reviews />
+            <FAQ />
+            <QuestionForm currentCity={currentCity} />
+            <Contacts currentCity={currentCity} />
+          </Suspense>
+        </main>
+        <Suspense fallback={null}>
+          <Footer currentCity={currentCity} />
+          <BookingModal currentCity={currentCity} />
+          <MobileBottomTabBar currentCity={currentCity} />
         </Suspense>
-      </main>
-      <Suspense fallback={null}>
-        <Footer currentCity={currentCity} />
-        <BookingModal currentCity={currentCity} />
-        <MobileBottomTabBar currentCity={currentCity} />
-      </Suspense>
       </ModalProvider>
     </ToastProvider>
   );
@@ -135,6 +152,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/spb" replace />} />
         <Route path="/:citySlug" element={<MainContent />} />
+        <Route path="*" element={<Navigate to="/spb" replace />} />
       </Routes>
     </div>
   );

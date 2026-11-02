@@ -36,6 +36,19 @@ const CITY_LEGAL_INFO: Record<string, string[]> = {
 export default function Footer({ currentCity }: { currentCity?: any }) {
   const cityLegalTexts = currentCity?.name ? CITY_LEGAL_INFO[currentCity.name] : [];
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    if (href === '#home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const el = document.querySelector(href);
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="bg-white border-t border-slate-200 mt-auto flex-shrink-0 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
@@ -45,14 +58,14 @@ export default function Footer({ currentCity }: { currentCity?: any }) {
           <div className="flex flex-col gap-6 lg:col-span-1">
             <img 
               src="/logo.png" 
-              alt="Прагматика" 
+              alt="Прагматика Эксперт Сервис" 
               className="h-8 object-contain w-[140px] object-left"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="24"><rect width="60" height="24" fill="%23f1f5f9" rx="4"/><text x="30" y="16" font-family="sans-serif" font-size="10" font-weight="bold" fill="%2364748b" text-anchor="middle">LOGO</text></svg>';
               }} 
             />
             <p className="text-sm text-slate-500 leading-relaxed">
-              Мультибрендовый автосервис «Прагматика». Профессиональный ремонт и техническое обслуживание автомобилей любой сложности с гарантией качества.
+              Мультибрендовый автосервис «Прагматика Эксперт Сервис». Профессиональный ремонт и техническое обслуживание автомобилей любой сложности с гарантией качества.
             </p>
           </div>
 
@@ -62,7 +75,11 @@ export default function Footer({ currentCity }: { currentCity?: any }) {
             <ul className="flex flex-col gap-3">
               {NAV_LINKS.slice(0, 4).map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-sm text-slate-500 hover:text-[#8cc63f] transition-colors">
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="text-sm text-slate-500 hover:text-[#8cc63f] transition-colors"
+                  >
                     {link.label}
                   </a>
                 </li>
@@ -75,7 +92,11 @@ export default function Footer({ currentCity }: { currentCity?: any }) {
             <ul className="flex flex-col gap-3">
               {NAV_LINKS.slice(4).map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-sm text-slate-500 hover:text-[#8cc63f] transition-colors">
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="text-sm text-slate-500 hover:text-[#8cc63f] transition-colors"
+                  >
                     {link.label}
                   </a>
                 </li>

@@ -3,6 +3,13 @@ import { Calendar as CalendarIcon, Clock, Car, MapPin, Wrench, CheckCircle2, Loa
 import PhoneInput from './PhoneInput';
 import { ADDRESSES } from '../data';
 import { useToast } from '../contexts/ToastContext';
+import {
+  WEB3FORMS_ACCESS_KEY,
+  sendCalltouchLead,
+  reachMetrikaGoal,
+  isValidRussianPhone,
+  getLocalDateString
+} from '../utils/analytics';
 
 interface OnlineBookingProps {
   currentCity: { slug: string; name: string };
@@ -28,25 +35,18 @@ const TIME_SLOTS = [
 export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
   const { showToast } = useToast();
 
-  // Helper date generators
-  const todayStr = useMemo(() => {
-    const d = new Date();
-    return d.toISOString().split('T')[0];
-  }, []);
-
-  const getRelativeDate = (offsetDays: number) => {
-    const d = new Date();
-    d.setDate(d.getDate() + offsetDays);
-    return d.toISOString().split('T')[0];
-  };
+  // Helper date generators using local timezone
+  const todayStr = useMemo(() => getLocalDateString(0), []);
 
   const [selectedService, setSelectedService] = useState(SERVICE_OPTIONS[0]);
-  const [selectedDate, setSelectedDate] = useState(() => getRelativeDate(0));
+  const [selectedDate, setSelectedDate] = useState(() => getLocalDateString(0));
   const [selectedTime, setSelectedTime] = useState('10:00');
   const [carModel, setCarModel] = useState('');
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [comment, setComment] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const currentAddresses = useMemo(() => {
     return currentCity ? ADDRESSES.find(a => a.city === currentCity.name)?.addresses || [] : [];
@@ -85,12 +85,21 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('submitting');
+    setErrorMessage('');
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+    const submittedPhone = String(formData.get('phone') || phone || '');
 
-    formData.append('access_key', 'de59e5a7-a572-4fd3-b285-86fabde267ce');
+    if (!isValidRussianPhone(submittedPhone)) {
+      setStatus('error');
+      setErrorMessage('Пожалуйста, введите полный 10-значный номер телефона.');
+      return;
+    }
+
+    setStatus('submitting');
+
+    formData.append('access_key', WEB3FORMS_ACCESS_KEY);
     formData.append('subject', `Самостоятельная онлайн-запись: ${selectedService} (${selectedDate} ${selectedTime})`);
     formData.append('Source', 'Самостоятельная онлайн-запись (Блок на сайте)');
     formData.append('Город', currentCity?.name || '');
@@ -100,6 +109,21 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
     formData.append('Желаемая_Дата', selectedDate);
     formData.append('Желаемое_Время', selectedTime);
 
+    // Send lead to Calltouch API in parallel (non-blocking)
+    sendCalltouchLead({
+      fio: name,
+      phoneNumber: submittedPhone,
+      subject: `Самостоятельная онлайн-запись: ${selectedService}`,
+      source: 'Самостоятельная онлайн-запись',
+      city: currentCity?.name,
+      service: selectedService,
+      dealerCenter: selectedDealer,
+      preferredDate: selectedDate,
+      preferredTime: selectedTime,
+      carModel: carModel || undefined,
+      comment: comment || undefined
+    });
+
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -107,20 +131,28 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
       });
       const data = await res.json();
       if (data.success) {
+        reachMetrikaGoal('online_booking_submit', {
+          city: currentCity?.name,
+          service: selectedService
+        });
         setStatus('success');
         showToast('Заявка на онлайн-запись принята! Мастер ждет вас в назначенное время.');
       } else {
         setStatus('error');
+        setErrorMessage('Произошла ошибка отправки. Попробуйте еще раз или позвоните нам.');
       }
     } catch {
       setStatus('error');
+      setErrorMessage('Произошла ошибка отправки. Попробуйте еще раз или позвоните нам.');
     }
   };
 
   const handleReset = () => {
     setStatus('idle');
+    setErrorMessage('');
     setCarModel('');
     setName('');
+    setPhone('');
     setComment('');
   };
 
@@ -164,7 +196,7 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
               <button
                 type="button"
                 onClick={handleReset}
-                className="bg-[#8cc63f] hover:bg-[#7bb033] text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-sm active:scale-95"
+                className="bg-[#8cc63f] hover:bg-[#7bb033] text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer"
               >
                 Записаться еще раз
               </button>
@@ -191,7 +223,7 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                           key={srv}
                           type="button"
                           onClick={() => setSelectedService(srv)}
-                          className={`text-left text-xs sm:text-sm font-medium p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+                          className={`text-left text-xs sm:text-sm font-medium p-3.5 rounded-xl border transition-all flex items-center justify-between cursor-pointer ${
                             isSelected
                               ? 'bg-[#8cc63f]/15 border-[#8cc63f] text-slate-900 font-semibold shadow-xs'
                               : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-100/50'
@@ -220,9 +252,9 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     <button
                       type="button"
-                      onClick={() => setSelectedDate(getRelativeDate(0))}
-                      className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all ${
-                        selectedDate === getRelativeDate(0)
+                      onClick={() => setSelectedDate(getLocalDateString(0))}
+                      className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
+                        selectedDate === getLocalDateString(0)
                           ? 'bg-slate-900 text-white border-slate-900'
                           : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                       }`}
@@ -231,9 +263,9 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setSelectedDate(getRelativeDate(1))}
-                      className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all ${
-                        selectedDate === getRelativeDate(1)
+                      onClick={() => setSelectedDate(getLocalDateString(1))}
+                      className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
+                        selectedDate === getLocalDateString(1)
                           ? 'bg-slate-900 text-white border-slate-900'
                           : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                       }`}
@@ -242,9 +274,9 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setSelectedDate(getRelativeDate(2))}
-                      className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all ${
-                        selectedDate === getRelativeDate(2)
+                      onClick={() => setSelectedDate(getLocalDateString(2))}
+                      className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
+                        selectedDate === getLocalDateString(2)
                           ? 'bg-slate-900 text-white border-slate-900'
                           : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
                       }`}
@@ -289,7 +321,7 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                             key={t}
                             type="button"
                             onClick={() => setSelectedTime(t)}
-                            className={`py-2 px-1 text-center rounded-lg text-xs sm:text-sm font-bold transition-all ${
+                            className={`py-2 px-1 text-center rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                               isTimeSelected
                                 ? 'bg-[#8cc63f] text-white shadow-sm scale-102'
                                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200/70'
@@ -398,6 +430,7 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                     <input
                       type="text"
                       name="name"
+                      autoComplete="name"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -414,6 +447,8 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                     <PhoneInput
                       name="phone"
                       required
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                       placeholder="+7 (___) ___-__-__"
                       className="w-full bg-slate-50 border border-slate-200 p-3.5 rounded-xl font-medium text-slate-900 placeholder:text-slate-400 text-sm focus:bg-white focus:ring-2 focus:ring-[#8cc63f] outline-none transition-all"
                     />
@@ -458,7 +493,7 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
 
                   {status === 'error' && (
                     <div className="p-3 bg-red-50 text-red-600 rounded-xl text-xs font-semibold text-center border border-red-200">
-                      Произошла ошибка отправки. Попробуйте еще раз или позвоните нам.
+                      {errorMessage || 'Произошла ошибка отправки. Попробуйте еще раз или позвоните нам.'}
                     </div>
                   )}
 
@@ -481,9 +516,26 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
                     )}
                   </button>
 
-                  <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                    <ShieldCheck className="w-4 h-4 text-[#8cc63f] shrink-0" />
-                    <span>Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</span>
+                  <div className="flex items-start gap-2.5 text-[11px] text-slate-500">
+                    <input
+                      type="checkbox"
+                      id="consent-online-booking"
+                      required
+                      defaultChecked
+                      className="w-4 h-4 mt-0.5 border-slate-300 rounded text-[#8cc63f] focus:ring-[#8cc63f] bg-slate-50 cursor-pointer shrink-0"
+                    />
+                    <label htmlFor="consent-online-booking" className="leading-snug cursor-pointer">
+                      Я даю согласие группе компаний «Прагматика» на{' '}
+                      <a
+                        href="/service.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#6a9e27] hover:underline font-semibold"
+                      >
+                        обработку моих персональных данных
+                      </a>
+                      .
+                    </label>
                   </div>
 
                 </div>
