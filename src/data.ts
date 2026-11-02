@@ -45,7 +45,21 @@ export const OFFERS = [
   },
 ];
 
-export const ADDRESSES = [
+export interface AddressPoint {
+  address: string;
+  coords: [number, number];
+}
+
+export interface CityAddressData {
+  city: string;
+  phone: string;
+  addresses: string[];
+  center: [number, number];
+  zoom: number;
+  points: AddressPoint[];
+}
+
+export const ADDRESSES: CityAddressData[] = [
   { 
     city: 'Санкт-Петербург', 
     phone: '8 800 551-19-67',
@@ -54,36 +68,63 @@ export const ADDRESSES = [
       'Малая Балканская ул., 57',
       'ул. Меркурьева, 6'
     ],
-    mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A68f9ed39a68fafe4910b0fbaaf78ed278ec65c6a405f1ce42ff88a3bb095f980&source=constructor'
+    center: [59.955998, 30.335000],
+    zoom: 10,
+    points: [
+      { address: 'Уральская ул., 33Б', coords: [59.955998, 30.238209] },
+      { address: 'Малая Балканская ул., 57', coords: [59.828518, 30.426720] },
+      { address: 'ул. Меркурьева, 6', coords: [60.072031, 30.340698] }
+    ]
   },
   { 
     city: 'Псков', 
     phone: '8 800 551-19-67',
     addresses: ['ул. Леона Поземского, 112'],
-    mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A1ec3efa572b3fc2d2c1632b7a2aeb500fd1cb13fa3b6aca4f1e0f707a72ec101&source=constructor'
+    center: [57.835113, 28.310244],
+    zoom: 16,
+    points: [
+      { address: 'ул. Леона Поземского, 112', coords: [57.835113, 28.310244] }
+    ]
   },
   { 
     city: 'Петрозаводск', 
     phone: '8 800 551-19-67',
     addresses: ['Комсомольский проспект, 8'],
-    mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A24916bdac1b541be75c43b5ae47e2fce5454c522c97449f2cfc9ca03751ef31e&source=constructor'
+    center: [61.766718, 34.357442],
+    zoom: 16,
+    points: [
+      { address: 'Комсомольский проспект, 8', coords: [61.766718, 34.357442] }
+    ]
   },
   { 
     city: 'Мурманск', 
     phone: '8 800 551-19-67',
     addresses: ['Кольский проспект, 110'],
-    mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A100ac8c9e12b3b998a48613d2bfc06adf2ababf3a1ccbc7d08ea9ef76cb85454&source=constructor'
+    center: [68.927992, 33.114111],
+    zoom: 16,
+    points: [
+      { address: 'Кольский проспект, 110', coords: [68.927992, 33.114111] }
+    ]
   },
   { 
     city: 'Великие Луки', 
     phone: '8 800 551-19-67',
     addresses: ['улица Гоголя, 4'],
-    mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A4a07e8813ec6044729edaf2b94a5778b53b227b361b10cba5e9f4ef6c8009061&source=constructor'
+    center: [56.360003, 30.566992],
+    zoom: 16,
+    points: [
+      { address: 'улица Гоголя, 4', coords: [56.360003, 30.566992] }
+    ]
   },
   { 
     city: 'Великий Новгород', 
     phone: '8 800 551-19-67',
     addresses: ['Московская улица, 57'],
-    mapUrl: 'https://yandex.ru/map-widget/v1/?um=constructor%3A53b77e63d6d681281c86918ff3914dc2833ade488a9acfc024097e9370a7489f&source=constructor'
+    center: [58.534099, 31.319619],
+    zoom: 16,
+    points: [
+      { address: 'Московская улица, 57', coords: [58.534099, 31.319619] }
+    ]
   }
 ];
+
