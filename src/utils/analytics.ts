@@ -36,9 +36,19 @@ declare global {
 export function getCalltouchSessionId(): string | undefined {
   try {
     if (typeof window !== 'undefined' && typeof window.ct === 'function') {
-      const params = window.ct('calltracking_params', CALLTOUCH_MOD_ID);
-      if (params && params.sessionId) {
-        return params.sessionId;
+      const byModId = window.ct('calltracking_params', CALLTOUCH_MOD_ID);
+      if (byModId && byModId.sessionId) {
+        return String(byModId.sessionId);
+      }
+      const defaultParams = window.ct('calltracking_params');
+      if (defaultParams && defaultParams.sessionId) {
+        return String(defaultParams.sessionId);
+      }
+    }
+    if (typeof document !== 'undefined') {
+      const match = document.cookie.match(/(?:^|;\s*)_ct_session_id=([^;]*)/);
+      if (match && match[1]) {
+        return decodeURIComponent(match[1]);
       }
     }
   } catch {
@@ -55,6 +65,9 @@ export function normalizePhoneDigits(phone: string): string {
   if (digits.length === 11 && digits.startsWith('8')) {
     return '7' + digits.slice(1);
   }
+  if (digits.length === 10) {
+    return '7' + digits;
+  }
   return digits;
 }
 
@@ -67,9 +80,10 @@ export function isValidRussianPhone(phone: string): boolean {
 }
 
 /**
- * Sends lead data to Calltouch Requests API
+ * Sends lead data to Calltouch Requests API (site_id: 16642)
+ * Uses official endpoint https://api.calltouch.ru/calls-service/RestAPI/requests/16642/register/
  */
-export async function sendCalltouchLead(payload: LeadPayload): Promise<void> {
+export async function sendCalltouchLead(payload: LeadPayload): Promise<boolean> {
   try {
     const sessionId = getCalltouchSessionId();
     const cleanPhone = normalizePhoneDigits(payload.phoneNumber);
@@ -90,11 +104,18 @@ export async function sendCalltouchLead(payload: LeadPayload): Promise<void> {
     const tags: string[] = [];
     if (payload.city) tags.push(payload.city);
     if (payload.source) tags.push(payload.source);
+    if (payload.service) tags.push(payload.service.slice(0, 45));
+
+    const detailedSubjectParts: string[] = [
+      payload.subject || 'Заявка с сайта Прагматика Эксперт Сервис'
+    ];
+    if (payload.city) detailedSubjectParts.push(payload.city);
+    if (payload.dealerCenter) detailedSubjectParts.push(payload.dealerCenter);
 
     const ctParams = new URLSearchParams();
     ctParams.append('fio', payload.fio.trim());
     ctParams.append('phoneNumber', cleanPhone);
-    ctParams.append('subject', payload.subject || 'Заявка с сайта Прагматика Эксперт Сервис');
+    ctParams.append('subject', detailedSubjectParts.join(' — '));
     if (commentParts.length > 0) {
       ctParams.append('comment', commentParts.join(' | '));
     }
@@ -108,18 +129,21 @@ export async function sendCalltouchLead(payload: LeadPayload): Promise<void> {
       ctParams.append('sessionId', sessionId);
     }
 
-    await fetch(
-      `https://api.node19.calltouch.ru/calls-service/RestAPI/requests/${CALLTOUCH_SITE_ID}/register/`,
+    const response = await fetch(
+      `https://api.calltouch.ru/calls-service/RestAPI/requests/${CALLTOUCH_SITE_ID}/register/`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         },
         body: ctParams.toString(),
+        keepalive: true,
       }
     );
+
+    return response.ok;
   } catch {
-    // Non-blocking: if Calltouch endpoint is blocked by adblock or CORS, do not fail main submission
+    return false;
   }
 }
 

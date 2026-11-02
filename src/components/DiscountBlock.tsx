@@ -44,24 +44,27 @@ export default function DiscountBlock({ currentCity }: { currentCity?: any }) {
       formData.append('City', currentCity.name);
     }
 
-    // Send lead to Calltouch API in parallel (non-blocking)
-    sendCalltouchLead({
-      fio: name,
-      phoneNumber: phone,
-      subject: 'Запись на сервис (Блок на странице)',
-      source: 'Блок записи на странице',
-      city: currentCity?.name,
-      service,
-      dealerCenter
-    });
-
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (data.success) {
+      const [ctSuccess, web3Success] = await Promise.all([
+        sendCalltouchLead({
+          fio: name,
+          phoneNumber: phone,
+          subject: `Запись на сервис (Блок на странице): ${service || 'Консультация'}`,
+          source: 'Блок записи на странице',
+          city: currentCity?.name,
+          service,
+          dealerCenter
+        }),
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        })
+          .then(res => res.json())
+          .then(data => Boolean(data?.success))
+          .catch(() => false)
+      ]);
+
+      if (ctSuccess || web3Success) {
         reachMetrikaGoal('discount_block_submit', {
           city: currentCity?.name,
           service

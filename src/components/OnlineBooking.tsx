@@ -109,28 +109,31 @@ export default function OnlineBooking({ currentCity }: OnlineBookingProps) {
     formData.append('Желаемая_Дата', selectedDate);
     formData.append('Желаемое_Время', selectedTime);
 
-    // Send lead to Calltouch API in parallel (non-blocking)
-    sendCalltouchLead({
-      fio: name,
-      phoneNumber: submittedPhone,
-      subject: `Самостоятельная онлайн-запись: ${selectedService}`,
-      source: 'Самостоятельная онлайн-запись',
-      city: currentCity?.name,
-      service: selectedService,
-      dealerCenter: selectedDealer,
-      preferredDate: selectedDate,
-      preferredTime: selectedTime,
-      carModel: carModel || undefined,
-      comment: comment || undefined
-    });
-
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (data.success) {
+      const [ctSuccess, web3Success] = await Promise.all([
+        sendCalltouchLead({
+          fio: name,
+          phoneNumber: submittedPhone,
+          subject: `Самостоятельная онлайн-запись: ${selectedService} (${selectedDate} ${selectedTime})`,
+          source: 'Самостоятельная онлайн-запись',
+          city: currentCity?.name,
+          service: selectedService,
+          dealerCenter: selectedDealer,
+          preferredDate: selectedDate,
+          preferredTime: selectedTime,
+          carModel: carModel || undefined,
+          comment: comment || undefined
+        }),
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        })
+          .then(res => res.json())
+          .then(data => Boolean(data?.success))
+          .catch(() => false)
+      ]);
+
+      if (ctSuccess || web3Success) {
         reachMetrikaGoal('online_booking_submit', {
           city: currentCity?.name,
           service: selectedService

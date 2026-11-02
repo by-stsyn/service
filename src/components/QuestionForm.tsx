@@ -43,24 +43,27 @@ export default function QuestionForm({ currentCity }: { currentCity?: any }) {
       formData.append('City', currentCity.name);
     }
 
-    // Send lead to Calltouch API in parallel (non-blocking)
-    sendCalltouchLead({
-      fio: name,
-      phoneNumber: phone,
-      subject: 'Вопрос с сайта (Остались вопросы)',
-      source: 'Блок Остались вопросы',
-      city: currentCity?.name,
-      dealerCenter,
-      comment: question || undefined
-    });
-
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (data.success) {
+      const [ctSuccess, web3Success] = await Promise.all([
+        sendCalltouchLead({
+          fio: name,
+          phoneNumber: phone,
+          subject: 'Вопрос с сайта (Остались вопросы)',
+          source: 'Блок Остались вопросы',
+          city: currentCity?.name,
+          dealerCenter,
+          comment: question || undefined
+        }),
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        })
+          .then(res => res.json())
+          .then(data => Boolean(data?.success))
+          .catch(() => false)
+      ]);
+
+      if (ctSuccess || web3Success) {
         reachMetrikaGoal('question_form_submit', {
           city: currentCity?.name
         });

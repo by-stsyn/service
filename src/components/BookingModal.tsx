@@ -141,30 +141,33 @@ export default function BookingModal({ currentCity }: { currentCity?: any }) {
       formData.append('Желаемое_время_записи', preferredTime);
     }
 
-    // Send lead to Calltouch API in parallel (non-blocking)
-    sendCalltouchLead({
-      fio: name,
-      phoneNumber: phone,
-      subject:
-        parsedContext.type === 'offer'
-          ? `Заявка по акции: ${parsedContext.label}`
-          : 'Запись на сервис (Модальное окно)',
-      source: 'Модальное окно записи',
-      city: currentCity?.name,
-      service,
-      dealerCenter,
-      preferredDate,
-      preferredTime,
-      specialOffer: parsedContext.type === 'offer' ? parsedContext.label : undefined
-    });
-
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (data.success) {
+      const [ctSuccess, web3Success] = await Promise.all([
+        sendCalltouchLead({
+          fio: name,
+          phoneNumber: phone,
+          subject:
+            parsedContext.type === 'offer'
+              ? `Заявка по акции: ${parsedContext.label}`
+              : `Запись на сервис: ${service || 'Консультация'}`,
+          source: 'Модальное окно записи',
+          city: currentCity?.name,
+          service,
+          dealerCenter,
+          preferredDate,
+          preferredTime,
+          specialOffer: parsedContext.type === 'offer' ? parsedContext.label : undefined
+        }),
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+        })
+          .then(res => res.json())
+          .then(data => Boolean(data?.success))
+          .catch(() => false)
+      ]);
+
+      if (ctSuccess || web3Success) {
         reachMetrikaGoal('booking_modal_submit', {
           city: currentCity?.name,
           service
